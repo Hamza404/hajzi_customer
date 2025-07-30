@@ -11,7 +11,7 @@ class GetOrder {
 
   factory GetOrder.fromJson(Map<String, dynamic> json) {
     return GetOrder(
-      orders: OrderModel.fromJson(json['orders'] ?? {}),
+      orders: OrderModel.fromJson(json['order'] ?? {}),
       business: BusinessModel.fromJson(json['business'] ?? {}),
     );
   }

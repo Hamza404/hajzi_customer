@@ -51,7 +51,7 @@ class BusinessModel {
       latitude: double.parse(json['latitude'].toString()),
       longitude: double.parse(json['longitude'].toString()),
       isCompleted: json['isCompleted'],
-      queuedCount: json['queuedCount'],
+      queuedCount: json['queuedCount'] ?? 0,
     );
   }
 }
