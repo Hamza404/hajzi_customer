@@ -1,3 +1,22 @@
+import 'package:hajzi/presentation/seachbusiness/model/business_model.dart';
+
+class GetOrder {
+  final OrderModel orders;
+  final BusinessModel business;
+
+  GetOrder({
+    required this.orders,
+    required this.business,
+  });
+
+  factory GetOrder.fromJson(Map<String, dynamic> json) {
+    return GetOrder(
+      orders: OrderModel.fromJson(json['orders'] ?? {}),
+      business: BusinessModel.fromJson(json['business'] ?? {}),
+    );
+  }
+}
+
 class OrderModel {
   final int id;
   final String phoneNumber;
@@ -31,4 +50,4 @@ class OrderModel {
       amount: (json['amount'] ?? 0).toDouble(),
     );
   }
-} 
+}

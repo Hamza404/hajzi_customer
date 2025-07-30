@@ -3,10 +3,10 @@ import 'package:hajzi/presentation/dashboard/model/order_model.dart';
 class ManageReservationsState {
   final bool isLoading;
   final String? error;
-  final List<OrderModel> pendingOrders;
-  final List<OrderModel> queuedOrders;
-  final List<OrderModel> payedOrders;
-  final List<OrderModel> completedOrders;
+  final List<GetOrder> pendingOrders;
+  final List<GetOrder> queuedOrders;
+  final List<GetOrder> payedOrders;
+  final List<GetOrder> completedOrders;
 
   ManageReservationsState({
     this.isLoading = false,
@@ -20,10 +20,10 @@ class ManageReservationsState {
   ManageReservationsState copyWith({
     bool? isLoading,
     String? error,
-    List<OrderModel>? pendingOrders,
-    List<OrderModel>? queuedOrders,
-    List<OrderModel>? payedOrders,
-    List<OrderModel>? completedOrders,
+    List<GetOrder>? pendingOrders,
+    List<GetOrder>? queuedOrders,
+    List<GetOrder>? payedOrders,
+    List<GetOrder>? completedOrders,
   }) {
     return ManageReservationsState(
       isLoading: isLoading ?? this.isLoading,

@@ -48,10 +48,10 @@ class ManageReservationsScreen extends StatelessWidget {
                             _buildStatusSection('Confirmed', state.payedOrders, _buildPayedCard),
                             _buildStatusSection('Completed', state.completedOrders, _buildCompletedCard),
                             const SizedBox(height: 24),
-                          ],
-                        ),
-                      ),
-                    ),
+                          ]
+                        )
+                      )
+                    )
                   )
                 ],
               ))
@@ -60,7 +60,7 @@ class ManageReservationsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStatusSection(String title, List<OrderModel> orders, Widget Function(OrderModel) cardBuilder) {
+  Widget _buildStatusSection(String title, List<GetOrder> orders, Widget Function(GetOrder) cardBuilder) {
     if (orders.isEmpty) return const SizedBox.shrink();
 
     return Column(
@@ -83,7 +83,7 @@ class ManageReservationsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPendingCard(OrderModel order) {
+  Widget _buildPendingCard(GetOrder order) {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -146,7 +146,7 @@ class ManageReservationsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildQueuedCard(OrderModel order) {
+  Widget _buildQueuedCard(GetOrder order) {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -211,7 +211,7 @@ class ManageReservationsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPayedCard(OrderModel order) {
+  Widget _buildPayedCard(GetOrder order) {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -274,14 +274,14 @@ class ManageReservationsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCompletedCard(OrderModel order) {
+  Widget _buildCompletedCard(GetOrder order) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.blue.withOpacity(0.1),
         borderRadius: BorderRadius.circular(16),
         image: const DecorationImage(
-          image: AssetImage('assets/ic_completed_bg.png'), // 👈 your image path here
+          image: AssetImage('assets/ic_completed_bg.png'),
           fit: BoxFit.cover, // cover entire container
         ),
       ),
@@ -297,7 +297,7 @@ class ManageReservationsScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'SAR ${order.amount.toStringAsFixed(0)}',
+                  'SAR ${order.orders.amount.toStringAsFixed(0)}',
                   style: FontStyles.fontW600.copyWith(
                     fontSize: 18,
                     color: AppColors.black,

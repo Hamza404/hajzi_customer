@@ -14,18 +14,18 @@ class ManageReservationsCubit extends Cubit<ManageReservationsState> {
       final response = await ApiManager.get('Order/GetUserOrder');
       if (response['isSuccess'] == true && response['content'] is List) {
         final orders = (response['content'] as List)
-            .map((e) => OrderModel.fromJson(e))
+            .map((e) => GetOrder.fromJson(e))
             .toList();
         
         final pendingOrders = orders.where((order) =>
-            order.status.toLowerCase() == 'pending').toList();
+            order.orders.status.toLowerCase() == 'pending').toList();
         final queuedOrders = orders.where((order) => 
-            order.status.toLowerCase() == 'queued').toList();
+            order.orders.status.toLowerCase() == 'queued').toList();
         final payedOrders = orders.where((order) => 
-            order.status.toLowerCase() == 'accepted' ||
-            order.status.toLowerCase() == 'cancelled').toList();
+            order.orders.status.toLowerCase() == 'accepted' ||
+            order.orders.status.toLowerCase() == 'cancelled').toList();
         final completedOrders = orders.where((order) => 
-            order.status.toLowerCase() == 'completed').toList();
+            order.orders.status.toLowerCase() == 'completed').toList();
         
         emit(state.copyWith(
           isLoading: false,
