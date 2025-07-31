@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hajzi/presentation/payment/bloc/payment_state.dart';
 import 'package:hajzi/widgets/custom_toast.dart';
 import 'package:pay/pay.dart';
+import '../dashboard/model/order_model.dart';
 import 'bloc/payment_cubit.dart';
+import 'bloc/payment_state.dart';
 
 class PaymentScreen extends StatelessWidget {
   PaymentScreen({super.key});
@@ -53,6 +56,8 @@ class PaymentScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    final order = ModalRoute.of(context)!.settings.arguments as OrderModel;
+
     const _paymentItems = [
       PaymentItem(
         label: 'Total',
@@ -61,54 +66,53 @@ class PaymentScreen extends StatelessWidget {
       )
     ];
 
-    return BlocProvider(
-      create: (_) => PaymentCubit(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Payment'),
-          backgroundColor: Colors.white,
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Payment'),
         backgroundColor: Colors.white,
-        body: BlocConsumer<PaymentCubit, PaymentStatus>(
-          listener: (context, state) {
-            if (state == PaymentStatus.success) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Payment successful!')),
-              );
-            } else if (state == PaymentStatus.failure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Payment failed!')),
-              );
-            }
-          },
-          builder: (context, state) {
-            return Column(
-              children: [
-                _buildBanner(),
-                Expanded(child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: GooglePayButton(
-                      paymentConfiguration: PaymentConfiguration.fromJsonString(_googlePayConfig),
-                      paymentItems: _paymentItems,
-                      type: GooglePayButtonType.pay,
-                      width: double.infinity,
-                      onPaymentResult: (result) => onGooglePayResult(result, context),
-                      loadingIndicator: const Center(
-                        child: CircularProgressIndicator(),
-                      ),
-                      margin: const EdgeInsets.only(top: 15.0),
-                    ))),
-              ],
+      ),
+      backgroundColor: Colors.white,
+      body: BlocConsumer<PaymentCubit, PaymentState>(
+        listener: (context, state) {
+          if (state.status == PaymentStatus.success) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Payment successful!')),
             );
-          },
-        ),
+          } else if (state.status == PaymentStatus.failure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Payment failed!')),
+            );
+          }
+        },
+        builder: (context, state) {
+          return Column(
+            children: [
+              _buildBanner(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: GooglePayButton(
+                  paymentConfiguration: PaymentConfiguration.fromJsonString(_googlePayConfig),
+                  paymentItems: _paymentItems,
+                  type: GooglePayButtonType.pay,
+                  width: double.infinity,
+                  onPaymentResult: (result) => onGooglePayResult(result, context, order),
+                  loadingIndicator: const Center(child: CircularProgressIndicator()),
+                  margin: const EdgeInsets.only(top: 15.0),
+                ),
+              ),
+
+              if(state.isOrderLoading)... [
+                const SizedBox(height: 30),
+                const CircularProgressIndicator(color: Colors.black)
+              ]
+            ],
+          );
+        },
       ),
     );
   }
 
-  void onGooglePayResult(paymentResult, context) {
-    print(paymentResult);
-
+  void onGooglePayResult(paymentResult, BuildContext context, OrderModel order) {
     if (paymentResult.containsKey('paymentMethodData')) {
       final data = paymentResult['paymentMethodData'];
 
@@ -116,6 +120,7 @@ class PaymentScreen extends StatelessWidget {
           data['tokenizationData']?['token'] != null) {
         CustomToast.show(context, message: 'Payment successful');
 
+        context.read<PaymentCubit>().updatePaymentStatus(order.id, 'pm_1Hxxxxxxx');
 
       } else {
         CustomToast.show(context, message: 'Payment failed');

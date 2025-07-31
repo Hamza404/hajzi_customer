@@ -6,7 +6,7 @@ class DashboardState {
   final List<CategoryModel> categories;
   final String? error;
   final bool isOrderLoading;
-  final OrderModel? currentOrder;
+  final GetOrder? currentOrder;
   final String? orderError;
 
   DashboardState({
@@ -23,7 +23,7 @@ class DashboardState {
     List<CategoryModel>? categories,
     String? error,
     bool? isOrderLoading,
-    OrderModel? currentOrder,
+    GetOrder? currentOrder,
     String? orderError,
   }) {
     return DashboardState(

@@ -34,8 +34,11 @@ class DashboardCubit extends Cubit<DashboardState> {
       if (response['isSuccess'] == true && response['content'] is List) {
         final orders = (response['content'] as List);
         if (orders.isNotEmpty) {
-          final order = OrderModel.fromJson(orders[0]);
-          emit(state.copyWith(isOrderLoading: false, currentOrder: order));
+          final orders = (response['content'] as List)
+              .map((e) => GetOrder.fromJson(e))
+              .toList();
+
+          emit(state.copyWith(isOrderLoading: false, currentOrder: orders[0]));
         } else {
           emit(state.copyWith(isOrderLoading: false, currentOrder: null));
         }

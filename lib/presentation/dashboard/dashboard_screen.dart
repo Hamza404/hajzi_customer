@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hajzi/core/localization/app_localization.dart';
 import 'package:hajzi/core/utils/navigator_service.dart';
 import 'package:hajzi/presentation/dashboard/bloc/dashboard_state.dart';
+import 'package:hajzi/presentation/dashboard/model/order_model.dart';
 import 'package:hajzi/routes/app_routes.dart';
 import 'package:hajzi/theme/app_colors.dart';
 import '../../theme/font_styles.dart';
@@ -30,6 +31,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return BlocBuilder<DashboardCubit, DashboardState>(
       builder: (context, state) {
         return Scaffold(
@@ -71,7 +73,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         state.isLoading
                             ? _buildShimmerGrid()
                             : _buildCategoryGrid(state),
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 30)
                       ],
                     ),
                   ),
@@ -84,12 +86,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildOrderStatusWidget(dynamic order) {
-    if (order.status.toLowerCase() == 'pending') {
+  Widget _buildOrderStatusWidget(GetOrder order) {
+    if (order.orders.status.toLowerCase() == 'pending') {
       return PendingOrderWidget(order: order);
-    } else if (order.status.toLowerCase() == 'accepted' ||
-        order.status.toLowerCase() == 'confirmed') {
-      return ConfirmedOrderWidget(order: order);
+    } else if (order.orders.status.toLowerCase() == 'accepted' ||
+        order.orders.status.toLowerCase() == 'confirmed') {
+      return ConfirmedOrderWidget(order: order, onPaymentSuccess: () {
+        context.read<DashboardCubit>().fetchUserOrder();
+      });
     }
     return const SizedBox.shrink();
   }

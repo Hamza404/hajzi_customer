@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hajzi/presentation/dashboard/dashboard_screen.dart';
 import '../../theme/app_colors.dart';
+import '../dashboard/bloc/dashboard_cubit.dart';
 import '../manage_reservations/manage_reservations_screen.dart';
 import 'bloc/tab_bloc.dart';
 import 'bloc/tab_event.dart';

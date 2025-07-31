@@ -69,7 +69,7 @@ class BusinessDetailCubit extends Cubit<BusinessDetailState> {
 
       if (response['isSuccess'] == true) {
         emit(state.copyWith(isLoading: false));
-        NavigatorService.pushNamedAndRemoveUntil(AppRoutes.mainScreen, arguments: 'refresh');
+        NavigatorService.pushNamedAndRemoveUntil(AppRoutes.mainScreen, arguments: 'onRefresh');
       } else {
         emit(state.copyWith(isLoading: false, error: response['messages']?.toString() ?? 'Unknown error'));
       }

@@ -7,11 +7,13 @@ import '../../../widgets/custom_button.dart';
 import '../model/order_model.dart';
 
 class ConfirmedOrderWidget extends StatelessWidget {
-  final OrderModel order;
+  final GetOrder order;
+  final Function() onPaymentSuccess;
 
   const ConfirmedOrderWidget({
     Key? key,
     required this.order,
+    required this.onPaymentSuccess
   }) : super(key: key);
 
   @override
@@ -103,7 +105,11 @@ class ConfirmedOrderWidget extends StatelessWidget {
             width: double.infinity,
             child: CustomButton(
               onPressed: () {
-                NavigatorService.pushNamed(AppRoutes.payment);
+                NavigatorService.pushNamed(AppRoutes.payment, arguments: order.orders).then((onValue) {
+                  if(onValue == 'onRefresh') {
+                    onPaymentSuccess();
+                  }
+                });
               },
               title: 'Proceed to Pay',
               backgroundColor: Colors.black,

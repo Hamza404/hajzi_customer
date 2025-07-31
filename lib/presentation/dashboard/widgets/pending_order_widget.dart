@@ -4,7 +4,7 @@ import 'package:hajzi/theme/font_styles.dart';
 import '../model/order_model.dart';
 
 class PendingOrderWidget extends StatelessWidget {
-  final OrderModel order;
+  final GetOrder order;
 
   const PendingOrderWidget({
     Key? key,
