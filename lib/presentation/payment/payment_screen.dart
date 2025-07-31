@@ -117,11 +117,8 @@ class PaymentScreen extends StatelessWidget {
       if (data['tokenizationData']?['type'] == 'PAYMENT_GATEWAY' &&
           data['tokenizationData']?['token'] != null) {
 
-        final transactionId = paymentResult['paymentMethodData']?['info']?['transactionId'];
-
         CustomToast.show(context, message: 'Payment successful');
-
-        context.read<PaymentCubit>().updatePaymentStatus(order.id, transactionId);
+        context.read<PaymentCubit>().updatePaymentStatus(order.id, "payment_id");
 
       } else {
         CustomToast.show(context, message: 'Payment failed');

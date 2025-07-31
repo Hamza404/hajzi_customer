@@ -185,8 +185,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
                             child: CustomButton(
                               title: 'Reserve your spot',
                               onPressed: () async {
-                                //context.read<BusinessDetailCubit>().reserveSpot();
-                                NavigatorService.pushNamedAndRemoveUntil(AppRoutes.mainScreen, arguments: 'onRefresh');
+                                context.read<BusinessDetailCubit>().reserveSpot();
                               },
                               backgroundColor: Colors.black,
                               textColor: Colors.white,
