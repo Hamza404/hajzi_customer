@@ -48,7 +48,7 @@ class ManageReservationsScreen extends StatelessWidget {
                             const SizedBox(height: 24),
                             _buildStatusSection(context, 'Pending', state.pendingOrders, _buildPendingCard),
                             _buildStatusSection(context,'Queued', state.queuedOrders, _buildQueuedCard),
-                            _buildStatusSection(context,'Confirmed', state.payedOrders, _buildPayedCard),
+                            _buildStatusSection(context,'Confirmed', state.payedOrders, _buildConfirmCard),
                             _buildStatusSection(context,'Completed', state.completedOrders, _buildCompletedCard),
                             const SizedBox(height: 24),
                           ]
@@ -217,7 +217,8 @@ class ManageReservationsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPayedCard(GetOrder order, BuildContext context) {
+  Widget _buildConfirmCard(GetOrder order, BuildContext context) {
+    final cubit = context.read<ManageReservationsCubit>();
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -228,60 +229,79 @@ class ManageReservationsScreen extends StatelessWidget {
             width: 0.8,
           )
       ),
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Hamza Saloon',
-                  style: FontStyles.fontW700.copyWith(fontSize: 18),
-                ),
-                Text(
-                  'Hair Cut',
-                  style: FontStyles.fontW400.copyWith(fontSize: 16),
-                ),
-              ],
-            ),
-          ),
-          Column(
+          Row(
             children: [
-              Container(
-                width: 58,
-                height: 78,
-                decoration: BoxDecoration(
-                  color: AppColors.dim_gray,
-                  borderRadius: BorderRadius.circular(8),
-                ),
+              Expanded(
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(
-                      Icons.location_on,
-                      color: AppColors.blue,
-                      size: 20,
-                    ),
-
                     Text(
-                      'Location',
-                      style: FontStyles.fontW800.copyWith(
-                        fontSize: 11,
-                        color: AppColors.blue,
-                      ),
+                      'Hamza Saloon',
+                      style: FontStyles.fontW700.copyWith(fontSize: 18),
+                    ),
+                    Text(
+                      'Hair Cut',
+                      style: FontStyles.fontW400.copyWith(fontSize: 16),
                     ),
                   ],
                 ),
               ),
+              Column(
+                children: [
+                  Container(
+                    width: 58,
+                    height: 78,
+                    decoration: BoxDecoration(
+                      color: AppColors.dim_gray,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.location_on,
+                          color: AppColors.blue,
+                          size: 20,
+                        ),
+
+                        Text(
+                          'Location',
+                          style: FontStyles.fontW800.copyWith(
+                            fontSize: 11,
+                            color: AppColors.blue,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
             ],
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: CustomButton(
+              onPressed: () {
+                NavigatorService.pushNamed(AppRoutes.payment, arguments: order.orders).then((onValue) {
+                  if(onValue == 'onRefresh') {
+                    cubit.refreshOrders();
+                  }
+                });
+              },
+              title: 'Proceed to Pay',
+              backgroundColor: Colors.black,
+              textColor: Colors.white,
+            ),
           )
         ],
-      ),
+      )
     );
   }
 
   Widget _buildCompletedCard(GetOrder order, BuildContext context) {
-    final cubit = context.read<ManageReservationsCubit>();
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -316,23 +336,7 @@ class ManageReservationsScreen extends StatelessWidget {
                 ),
               )
             ],
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: CustomButton(
-              onPressed: () {
-                NavigatorService.pushNamed(AppRoutes.payment, arguments: order.orders).then((onValue) {
-                  if(onValue == 'onRefresh') {
-                    cubit.refreshOrders();
-                  }
-                });
-              },
-              title: 'Proceed to Pay',
-              backgroundColor: Colors.black,
-              textColor: Colors.white,
-            ),
-          ),
+          )
         ],
       )
     );

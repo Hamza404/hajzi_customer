@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hajzi/widgets/custom_toast.dart';
@@ -118,9 +116,12 @@ class PaymentScreen extends StatelessWidget {
 
       if (data['tokenizationData']?['type'] == 'PAYMENT_GATEWAY' &&
           data['tokenizationData']?['token'] != null) {
+
+        final transactionId = paymentResult['paymentMethodData']?['info']?['transactionId'];
+
         CustomToast.show(context, message: 'Payment successful');
 
-        context.read<PaymentCubit>().updatePaymentStatus(order.id, 'pm_1Hxxxxxxx');
+        context.read<PaymentCubit>().updatePaymentStatus(order.id, transactionId);
 
       } else {
         CustomToast.show(context, message: 'Payment failed');
