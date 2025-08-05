@@ -5,6 +5,7 @@ import 'package:hajzi/presentation/dashboard/dashboard_screen.dart';
 import '../../theme/app_colors.dart';
 import '../dashboard/bloc/dashboard_cubit.dart';
 import '../manage_reservations/manage_reservations_screen.dart';
+import '../profile/profile_screen.dart';
 import 'bloc/tab_bloc.dart';
 import 'bloc/tab_event.dart';
 import 'bloc/tab_state.dart';
@@ -37,6 +38,7 @@ class _MainScreenState extends State<MainScreen> {
       DashboardScreen.builder(context),
       DashboardScreen.builder(context),
       ManageReservationsScreen.builder(context),
+      ProfileScreen.builder(context),
     ];
 
     WidgetsBinding.instance.addPostFrameCallback((_) {

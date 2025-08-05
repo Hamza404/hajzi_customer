@@ -1,3 +1,4 @@
+import '../../profile/model/profile_model.dart';
 import '../model/category_model.dart';
 import '../model/order_model.dart';
 
@@ -9,6 +10,10 @@ class DashboardState {
   final GetOrder? currentOrder;
   final String? orderError;
 
+  final ProfileModel? profileModel;
+  final bool isProfileLoading;
+  final bool unauthorized;
+
   DashboardState({
     this.isLoading = false,
     this.categories = const [],
@@ -16,6 +21,7 @@ class DashboardState {
     this.isOrderLoading = false,
     this.currentOrder,
     this.orderError,
+    this.profileModel, this.isProfileLoading = false, this.unauthorized = false
   });
 
   DashboardState copyWith({
@@ -25,6 +31,7 @@ class DashboardState {
     bool? isOrderLoading,
     GetOrder? currentOrder,
     String? orderError,
+    ProfileModel? profileModel, bool? isProfileLoading, bool? unauthorized
   }) {
     return DashboardState(
       isLoading: isLoading ?? this.isLoading,
@@ -33,6 +40,9 @@ class DashboardState {
       isOrderLoading: isOrderLoading ?? this.isOrderLoading,
       currentOrder: currentOrder ?? this.currentOrder,
       orderError: orderError ?? this.orderError,
+      profileModel: profileModel ?? this.profileModel,
+      isProfileLoading: isProfileLoading ?? this.isProfileLoading,
+      unauthorized: unauthorized ?? this.unauthorized,
     );
   }
 }

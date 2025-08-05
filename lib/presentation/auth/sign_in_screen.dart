@@ -8,7 +8,7 @@ import '../../widgets/custom_button.dart';
 import 'bloc/auth_cubit.dart';
 import 'bloc/auth_state.dart';
 
-class SignInScreen extends StatelessWidget {
+class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
 
   static Widget builder(BuildContext context) {
@@ -19,7 +19,14 @@ class SignInScreen extends StatelessWidget {
   }
 
   @override
+  State<SignInScreen> createState() => _SignInState();
+}
+
+class _SignInState extends State<SignInScreen> {
+
+  @override
   Widget build(BuildContext context) {
+
     final TextEditingController phoneController = TextEditingController();
     final codes = ['+966', '+971', '+92', '+1', '+44'];
 
@@ -119,7 +126,7 @@ class SignInScreen extends StatelessWidget {
                     onPressed: () {
                       final fullNumber = '${state.selectedCode}${phoneController.text.trim()}';
                       context.read<AuthCubit>().login(fullNumber);
-                      },
+                    },
                   ),
                   const Spacer(),
                   Row(

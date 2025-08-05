@@ -52,10 +52,9 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
     if(token!=null) {
       context.read<BusinessDetailCubit>().getUser();
     } else {
-      final result = await NavigatorService.pushNamed(AppRoutes.signIn);
-      if (result == true) {
+      await NavigatorService.pushNamed(AppRoutes.signIn).then((onValue) {
         context.read<BusinessDetailCubit>().getUser();
-      }
+      });
     }
   }
 

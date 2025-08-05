@@ -24,40 +24,60 @@ class ManageReservationsScreen extends StatelessWidget {
     return BlocBuilder<ManageReservationsCubit, ManageReservationsState>(
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: Colors.white,
-          body: Padding(
-              padding: const EdgeInsets.only(top: 56, left: 18, right: 18),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(child: Text('Manage your Reservations', style: FontStyles.fontW800.copyWith(fontSize: 36)))
-                    ],
-                  ),
-                  state.isLoading
-                      ? const Center(child: CircularProgressIndicator(color: Colors.black))
-                      : Expanded(
-                    child: RefreshIndicator(
-                      color: Colors.black,
-                      onRefresh: () => context.read<ManageReservationsCubit>().refreshOrders(),
-                      child: SingleChildScrollView(
-                        physics: const AlwaysScrollableScrollPhysics(), // 👈 important!
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const SizedBox(height: 24),
-                            _buildStatusSection(context, 'Pending', state.pendingOrders, _buildPendingCard),
-                            _buildStatusSection(context,'Queued', state.queuedOrders, _buildQueuedCard),
-                            _buildStatusSection(context,'Confirmed', state.payedOrders, _buildConfirmCard),
-                            _buildStatusSection(context,'Completed', state.completedOrders, _buildCompletedCard),
-                            const SizedBox(height: 24),
-                          ]
+            backgroundColor: Colors.white,
+            body: Padding(
+                padding: const EdgeInsets.only(top: 56, left: 18, right: 18),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(child: Text('Manage your Reservations', style: FontStyles.fontW800.copyWith(fontSize: 36)))
+                      ],
+                    ),
+                    state.isLoading ? const Center(child: CircularProgressIndicator(color: Colors.black))
+                        : Expanded(
+                        child: RefreshIndicator(
+                          color: Colors.black,
+                          onRefresh: () => context.read<ManageReservationsCubit>().refreshOrders(),
+                          child: SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const SizedBox(height: 24),
+
+                                if (state.pendingOrders.isEmpty &&
+                                    state.queuedOrders.isEmpty &&
+                                    state.payedOrders.isEmpty &&
+                                    state.completedOrders.isEmpty) ... [
+                                      Column(
+                                        children: [
+                                          Icon(Icons.queue, size: 44, color: Colors.grey[600]),
+                                          const SizedBox(height: 14),
+                                          Text(
+                                            'No reservations found',
+                                            style: FontStyles.fontW500.copyWith(
+                                                fontSize: 16, color: Colors.grey[600]),
+                                          )
+                                        ],
+                                      )
+                                ]
+                                else ...[
+                                  _buildStatusSection(context, 'Pending', state.pendingOrders, _buildPendingCard),
+                                  _buildStatusSection(context, 'Queued', state.queuedOrders, _buildQueuedCard),
+                                  _buildStatusSection(context, 'Confirmed', state.payedOrders, _buildConfirmCard),
+                                  _buildStatusSection(context, 'Completed', state.completedOrders, _buildCompletedCard),
+                                ],
+
+                                const SizedBox(height: 24),
+                              ],
+                            ),
+                          ),
                         )
-                      )
                     )
-                  )
-                ],
-              ))
+                  ],
+                )
+            )
         );
       },
     );
@@ -90,8 +110,8 @@ class ManageReservationsScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: AppColors.light_gray,
-        borderRadius: BorderRadius.circular(16),
+          color: AppColors.light_gray,
+          borderRadius: BorderRadius.circular(16),
           border: Border.all(
             color: Colors.grey.shade300,
             width: 0.8,
@@ -220,125 +240,125 @@ class ManageReservationsScreen extends StatelessWidget {
   Widget _buildConfirmCard(GetOrder order, BuildContext context) {
     final cubit = context.read<ManageReservationsCubit>();
     return Container(
-      padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          color: AppColors.light_gray,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: Colors.grey.shade300,
-            width: 0.8,
-          )
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: AppColors.light_gray,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.grey.shade300,
+              width: 0.8,
+            )
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Hamza Saloon',
+                        style: FontStyles.fontW700.copyWith(fontSize: 18),
+                      ),
+                      Text(
+                        'Hair Cut',
+                        style: FontStyles.fontW400.copyWith(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+                Column(
                   children: [
-                    Text(
-                      'Hamza Saloon',
-                      style: FontStyles.fontW700.copyWith(fontSize: 18),
-                    ),
-                    Text(
-                      'Hair Cut',
-                      style: FontStyles.fontW400.copyWith(fontSize: 16),
+                    Container(
+                      width: 58,
+                      height: 78,
+                      decoration: BoxDecoration(
+                        color: AppColors.dim_gray,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.location_on,
+                            color: AppColors.blue,
+                            size: 20,
+                          ),
+
+                          Text(
+                            'Location',
+                            style: FontStyles.fontW800.copyWith(
+                              fontSize: 11,
+                              color: AppColors.blue,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
-                ),
-              ),
-              Column(
-                children: [
-                  Container(
-                    width: 58,
-                    height: 78,
-                    decoration: BoxDecoration(
-                      color: AppColors.dim_gray,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.location_on,
-                          color: AppColors.blue,
-                          size: 20,
-                        ),
-
-                        Text(
-                          'Location',
-                          style: FontStyles.fontW800.copyWith(
-                            fontSize: 11,
-                            color: AppColors.blue,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              )
-            ],
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: CustomButton(
-              onPressed: () {
-                NavigatorService.pushNamed(AppRoutes.payment, arguments: order.orders).then((onValue) {
-                  if(onValue == 'onRefresh') {
-                    cubit.refreshOrders();
-                  }
-                });
-              },
-              title: 'Proceed to Pay',
-              backgroundColor: Colors.black,
-              textColor: Colors.white,
+                )
+              ],
             ),
-          )
-        ],
-      )
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: CustomButton(
+                onPressed: () {
+                  NavigatorService.pushNamed(AppRoutes.payment, arguments: order.orders).then((onValue) {
+                    if(onValue == 'onRefresh') {
+                      cubit.refreshOrders();
+                    }
+                  });
+                },
+                title: 'Proceed to Pay',
+                backgroundColor: Colors.black,
+                textColor: Colors.white,
+              ),
+            )
+          ],
+        )
     );
   }
 
   Widget _buildCompletedCard(GetOrder order, BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.blue.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(16),
-        image: const DecorationImage(
-          image: AssetImage('assets/ic_completed_bg.png'),
-          fit: BoxFit.cover, // cover entire container
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: AppColors.blue.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(16),
+          image: const DecorationImage(
+            image: AssetImage('assets/ic_completed_bg.png'),
+            fit: BoxFit.cover, // cover entire container
+          ),
         ),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Power Wash',
-                      style: FontStyles.fontW800.copyWith(fontSize: 18),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'SAR ${order.orders.amount.toStringAsFixed(0)}',
-                      style: FontStyles.fontW600.copyWith(
-                        fontSize: 18,
-                        color: AppColors.black,
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Power Wash',
+                        style: FontStyles.fontW800.copyWith(fontSize: 18),
                       ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          )
-        ],
-      )
+                      const SizedBox(height: 4),
+                      Text(
+                        'SAR ${order.orders.amount.toStringAsFixed(0)}',
+                        style: FontStyles.fontW600.copyWith(
+                          fontSize: 18,
+                          color: AppColors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            )
+          ],
+        )
     );
   }
 }

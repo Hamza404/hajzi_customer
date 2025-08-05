@@ -60,7 +60,8 @@ class AuthCubit extends Cubit<AuthState> {
             backgroundColor: Colors.green,
           );
           if(response['isProfileCompleted'] == true) {
-            Navigator.popUntil(context, (route) => route.settings.name == AppRoutes.businessDetail);
+            NavigatorService.goBack();
+            NavigatorService.popWithData('on_refresh');
           } else {
             NavigatorService.pushNamed(AppRoutes.userNameScreen);
           }
@@ -102,10 +103,12 @@ class AuthCubit extends Cubit<AuthState> {
       );
       emit(state.copyWith(isLoading: false, errorMessage: null));
 
-      if (response != null && response['name'] != null) {
+      if (response != null && response["isSuccess"] == true) {
         final context = NavigatorService.navigatorKey.currentContext;
         if (context != null) {
-          Navigator.popUntil(context, (route) => route.settings.name == AppRoutes.businessDetail);
+          NavigatorService.goBack();
+          NavigatorService.goBack();
+          NavigatorService.popWithData('on_refresh');
         }
       } else {
         emit(state.copyWith(errorMessage: response['message'] ?? 'Login failed. Please try again.'));

@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hajzi/presentation/dashboard/bloc/dashboard_state.dart';
 import 'package:hajzi/client/api_manager.dart';
+import 'package:hajzi/presentation/profile/model/profile_model.dart';
 import '../model/category_model.dart';
 import '../model/order_model.dart';
 
@@ -8,6 +9,7 @@ class DashboardCubit extends Cubit<DashboardState> {
   DashboardCubit() : super(DashboardState()) {
     fetchCategories();
     fetchUserOrder();
+    getUserProfile();
   }
 
   Future<void> fetchCategories() async {
@@ -47,6 +49,20 @@ class DashboardCubit extends Cubit<DashboardState> {
       }
     } catch (e) {
       emit(state.copyWith(isOrderLoading: false, orderError: e.toString()));
+    }
+  }
+
+  Future<void> getUserProfile() async {
+    emit(state.copyWith(isProfileLoading: true));
+    try {
+      final response = await ApiManager.get('User/UserProfile');
+      if (response['isSuccess'] == true) {
+        emit(state.copyWith(isProfileLoading: false, profileModel: ProfileModel.fromJson(response['content'])));
+      } else {
+        emit(state.copyWith(isProfileLoading: false));
+      }
+    } catch (e) {
+      emit(state.copyWith(isProfileLoading: false, profileModel: null));
     }
   }
 }
