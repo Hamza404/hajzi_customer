@@ -6,6 +6,7 @@ class PrefUtils {
   static String isLoggedIn = "logged_in";
   static String token = "token";
   static String isCompleted = "completed";
+  static String language = "lang";
 
   PrefUtils() {
     // init();

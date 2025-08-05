@@ -5,7 +5,7 @@ import 'manage_reservations_state.dart';
 
 class ManageReservationsCubit extends Cubit<ManageReservationsState> {
   ManageReservationsCubit() : super(ManageReservationsState()) {
-    fetchUserOrders();
+    refreshOrders();
   }
 
   Future<void> fetchUserOrders() async {

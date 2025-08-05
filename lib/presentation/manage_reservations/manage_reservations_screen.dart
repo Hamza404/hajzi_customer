@@ -124,11 +124,11 @@ class ManageReservationsScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Hamza Saloon',
+                  order.business.name,
                   style: FontStyles.fontW700.copyWith(fontSize: 18),
                 ),
                 Text(
-                  'Hair Cut',
+                  getServiceNameById(order.business.serviceCategoryId),
                   style: FontStyles.fontW400.copyWith(fontSize: 16),
                 ),
               ],
@@ -189,11 +189,10 @@ class ManageReservationsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Hamza Saloon',
+                      order.business.name,
                       style: FontStyles.fontW700.copyWith(fontSize: 18),
                     ),
-                    Text(
-                      'Hair Cut',
+                    Text(getServiceNameById(order.business.serviceCategoryId),
                       style: FontStyles.fontW400.copyWith(fontSize: 16),
                     ),
                   ],
@@ -213,7 +212,7 @@ class ManageReservationsScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Text(
-                          '1',
+                          order.orders.totalPerson.toString(),
                           style: FontStyles.fontW600.copyWith(
                             fontSize: 20,
                             color: AppColors.blue,
@@ -258,11 +257,11 @@ class ManageReservationsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Hamza Saloon',
+                        order.business.name,
                         style: FontStyles.fontW700.copyWith(fontSize: 18),
                       ),
                       Text(
-                        'Hair Cut',
+                        getServiceNameById(order.business.serviceCategoryId),
                         style: FontStyles.fontW400.copyWith(fontSize: 16),
                       ),
                     ],
@@ -287,7 +286,7 @@ class ManageReservationsScreen extends StatelessWidget {
                           ),
 
                           Text(
-                            'Location',
+                            order.business.address,
                             style: FontStyles.fontW800.copyWith(
                               fontSize: 11,
                               color: AppColors.blue,
@@ -325,11 +324,10 @@ class ManageReservationsScreen extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: AppColors.blue.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(12),
           image: const DecorationImage(
             image: AssetImage('assets/ic_completed_bg.png'),
-            fit: BoxFit.cover, // cover entire container
+            fit: BoxFit.fill,
           ),
         ),
         child: Column(
@@ -341,8 +339,18 @@ class ManageReservationsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Power Wash',
-                        style: FontStyles.fontW800.copyWith(fontSize: 18),
+                        order.business.name,
+                        style: FontStyles.fontW600.copyWith(fontSize: 14),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        getServiceNameById(order.business.serviceCategoryId),
+                        style: FontStyles.fontW600.copyWith(fontSize: 14),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        order.business.address,
+                        style: FontStyles.fontW600.copyWith(fontSize: 14),
                       ),
                       const SizedBox(height: 4),
                       Text(
@@ -354,11 +362,31 @@ class ManageReservationsScreen extends StatelessWidget {
                       ),
                     ],
                   ),
-                )
+                ),
+                const Spacer(),
+                Image.asset('assets/ic_completed_tick.png', width: 48, height: 48)
               ],
             )
           ],
         )
     );
+  }
+
+  String getServiceNameById(int id) {
+    final services = [
+      {"id": 1, "name": "Hair & Styling"},
+      {"id": 2, "name": "Car Wash & Services"},
+      {"id": 3, "name": "Restaurant"},
+      {"id": 4, "name": "Beauty Parlor"},
+      {"id": 5, "name": "Massage"},
+      {"id": 6, "name": "Medical & Dental"},
+    ];
+
+    final service = services.firstWhere(
+          (item) => item["id"] == id,
+      orElse: () => {},
+    );
+
+    return service["name"].toString();
   }
 }

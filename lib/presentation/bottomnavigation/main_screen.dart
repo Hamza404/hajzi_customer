@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hajzi/presentation/dashboard/dashboard_screen.dart';
+import 'package:hajzi/presentation/manage_reservations/bloc/manage_reservations_cubit.dart';
 import '../../theme/app_colors.dart';
 import '../dashboard/bloc/dashboard_cubit.dart';
 import '../manage_reservations/manage_reservations_screen.dart';
@@ -71,6 +72,12 @@ class _MainScreenState extends State<MainScreen> {
               final selectedTab = _indexToTab(index);
               if (selectedTab != state.currentTab) {
                 context.read<TabBloc>().add(TabChanged(selectedTab));
+
+                if (selectedTab == TabItem.home) {
+                  context.read<DashboardCubit>().fetchUserOrder();
+                } else if (selectedTab == TabItem.request) {
+                  context.read<ManageReservationsCubit>().refreshOrders();
+                }
               }
             },
           ),
