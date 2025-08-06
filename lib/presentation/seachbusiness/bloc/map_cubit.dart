@@ -94,7 +94,7 @@ class MapCubit extends Cubit<MapState> {
       
       final customIcon = await createCustomMarkerBitmap(
           isOpen ? '${business.business.queuedCount}\nWaiting' : 'Closed',
-          isOpen ? 'assets/typcn_location.png' : 'assets/closed_marker.png'
+          isOpen ? 'assets/marker_green.png' : 'assets/closed_marker.png'
       );
       
       final marker = Marker(

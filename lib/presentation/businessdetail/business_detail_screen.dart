@@ -52,10 +52,44 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
     if(token!=null) {
       context.read<BusinessDetailCubit>().getUser();
     } else {
-      await NavigatorService.pushNamed(AppRoutes.signIn).then((onValue) {
-        context.read<BusinessDetailCubit>().getUser();
-      });
+
+      final login = await showUnauthorizedDialog(context);
+      if(login) {
+        await NavigatorService.pushNamed(AppRoutes.signIn).then((onValue) {
+          context.read<BusinessDetailCubit>().getUser();
+        });
+      }
     }
+  }
+
+  Future<bool> showUnauthorizedDialog(BuildContext context) async {
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          title: Text("Unauthorized", style: FontStyles.fontW600.copyWith(fontSize: 16)),
+          content: Text("You are not authorized. Please login or sign up.", style: FontStyles.fontW400.copyWith(fontSize: 14)),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+              },
+              child: Text("Cancel", style: FontStyles.fontW400.copyWith(fontSize: 14, color: Colors.black)),
+            ),
+            CustomButton(
+              title: 'Login/Signup',
+              onPressed: () async {
+                Navigator.of(context).pop(true);
+              },
+              backgroundColor: Colors.black,
+              textColor: Colors.white,
+            ),
+          ],
+        );
+      },
+    );
+    return result == true;
   }
 
   @override

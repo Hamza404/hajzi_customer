@@ -39,6 +39,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               children: [
 
+                Image.asset('assets/ic_hajzi_banner.png', fit: BoxFit.cover),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -54,8 +56,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
 
                 const SizedBox(height: 10),
-
-                Image.asset('assets/ic_hajzi_banner.png', fit: BoxFit.cover),
 
                 state.isProfileLoading == true ? const Center(
                   child: CircularProgressIndicator(color: Colors.black),
