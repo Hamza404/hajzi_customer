@@ -29,6 +29,10 @@
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/pay-3.2.1" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/pay_ios-1.1.0" />
       <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/pay_android-3.1.1" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_core-4.0.0" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_messaging_web-4.0.0" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_messaging-16.0.0" />
+      <root url="file://$USER_HOME$/.pub-cache/hosted/pub.dev/firebase_core_web-3.0.0" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

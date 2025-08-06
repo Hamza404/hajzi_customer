@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "589067409845",
+    "project_id": "ajzi-495db",
+    "storage_bucket": "ajzi-495db.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:589067409845:android:754c005aeefb31345ae1fc",
+        "android_client_info": {
+          "package_name": "com.hajzi.business"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7SKv-adSkeIP-wAM65Q-SlCDj1zGIfK4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:589067409845:android:415dd5563c0cd86a5ae1fc",
+        "android_client_info": {
+          "package_name": "com.hajzi.customer"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7SKv-adSkeIP-wAM65Q-SlCDj1zGIfK4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

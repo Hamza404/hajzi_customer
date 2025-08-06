@@ -1,8 +1,12 @@
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:hajzi/presentation/dashboard/dashboard_screen.dart';
 import 'package:hajzi/presentation/manage_reservations/bloc/manage_reservations_cubit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../theme/app_colors.dart';
 import '../dashboard/bloc/dashboard_cubit.dart';
 import '../manage_reservations/manage_reservations_screen.dart';
@@ -50,6 +54,67 @@ class _MainScreenState extends State<MainScreen> {
         context.read<TabBloc>().add(TabChanged(tab));
       }
     });
+
+    requestNotificationPermission();
+    _initFirebaseMessaging();
+  }
+
+  void _initFirebaseMessaging() async {
+
+    final token = await getToken();
+
+    final FCMtoken = await FirebaseMessaging.instance.getToken();
+    print("FCM Token: $FCMtoken");
+
+    // Foreground
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print('Message received in foreground: ${message.notification?.title}');
+      // Optional: show a custom dialog or notification
+    });
+
+    // Background: when tapped and app is in background
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      final route = message.data['route'];
+      if (route != null) {
+        Navigator.pushNamed(context, route);
+      }
+    });
+
+    // App launch from terminated state via notification
+    final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      final route = initialMessage.data['route'];
+      if (route != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          Navigator.pushNamed(context, route);
+        });
+      }
+    }
+  }
+
+  Future<void> requestNotificationPermission() async {
+    if (Platform.isAndroid) {
+      final messaging = FirebaseMessaging.instance;
+
+      NotificationSettings settings = await messaging.requestPermission(
+        alert: true,
+        badge: true,
+        sound: true,
+      );
+
+      if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+        print('✅ Notification permission granted');
+      } else if (settings.authorizationStatus == AuthorizationStatus.denied) {
+        print('❌ Notification permission denied');
+      } else if (settings.authorizationStatus == AuthorizationStatus.notDetermined) {
+        print('❓ Notification permission not determined');
+      }
+    }
+  }
+
+  static Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('token');
   }
 
   int _tabToIndex(TabItem tab) => TabItem.values.indexOf(tab);

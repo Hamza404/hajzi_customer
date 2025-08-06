@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -15,6 +17,9 @@ void main() async {
 
   final savedLang = await PrefUtils().readValue(PrefUtils.language) ?? 'en';
   final savedLocale = Locale(savedLang);
+
+  await Firebase.initializeApp();
+  FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
 
   runApp(
     MultiBlocProvider(
@@ -85,4 +90,8 @@ class MyApp extends StatelessWidget {
   TextDirection _getTextDirection(String langCode) {
     return langCode == 'ar' ? TextDirection.rtl : TextDirection.ltr;
   }
+}
+
+Future<void> _backgroundHandler(RemoteMessage message) async {
+  // Handle background message
 }
