@@ -232,6 +232,10 @@ class _GoogleMapStackViewState extends State<_GoogleMapStackView> {
   }
 
   Widget _buildBusinessInfoCard(BusinessResponseModel business, Position? currentPosition, BuildContext context) {
+
+    final distance = context.read<MapCubit>().state.distance;
+    final status = getBusinessStatus(business.workingHours);
+
     return Material(
       elevation: 6,
       borderRadius: BorderRadius.circular(12),
@@ -263,16 +267,16 @@ class _GoogleMapStackViewState extends State<_GoogleMapStackView> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(' people in queue', style: FontStyles.fontW500.copyWith(fontSize: 13)),
+                Text('${business.business.queuedCount} people in queue', style: FontStyles.fontW500.copyWith(fontSize: 13)),
               ],
             ),
             const SizedBox(height: 8),
-            CustomButton(
+
+            if(status.contains('Open'))
+              CustomButton(
                 title: 'Reserve a spot with 7ajzi',
                 onPressed: () {
 
-                  final distance = context.read<MapCubit>().state.distance;
-                  final status = getBusinessStatus(business.workingHours);
                   NavigatorService.pushNamed(
                     AppRoutes.businessDetail,
                     arguments: {
@@ -286,7 +290,16 @@ class _GoogleMapStackViewState extends State<_GoogleMapStackView> {
                 },
                 backgroundColor: Colors.black,
                 textColor: Colors.white
-            )
+            ),
+
+            if(status.contains('Closed'))
+              CustomButton(
+                  title: 'Not Available',
+                  onPressed: () {},
+                  backgroundColor: AppColors.gray,
+                  textColor: Colors.black
+              )
+
           ],
         ),
       ),

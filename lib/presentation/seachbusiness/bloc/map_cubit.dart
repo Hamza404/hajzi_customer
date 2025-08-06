@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:hajzi/client/api_manager.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import 'map_state.dart';
 import '../model/business_model.dart';
 
@@ -40,7 +41,16 @@ class MapCubit extends Cubit<MapState> {
       final response = await ApiManager.get('BusinessDetails/GetBusinessByServiceId/$categoryId');
       
       if (response['isSuccess']) {
-        final businesses = (response['content'] as List).map((json) => BusinessResponseModel.fromJson(json)).toList();
+
+        final rawList = response['content'] as List;
+
+        final businesses = rawList.map((json) {
+          final business = BusinessResponseModel.fromJson(json);
+          business.currentDay = getTodayWorkingHours(business.workingHours);
+          return business;
+        }).toList();
+
+        //final businesses = (response['content'] as List).map((json) => BusinessResponseModel.fromJson(json)).toList();
         final businessMarkers = await _createBusinessMarkers(businesses);
         final allMarkers = {...state.markers, ...businessMarkers};
         
@@ -63,14 +73,28 @@ class MapCubit extends Cubit<MapState> {
     }
   }
 
+  WorkingHoursModel? getTodayWorkingHours(List<WorkingHoursModel> hoursList) {
+    final now = DateTime.now();
+    final today = now.weekday;
+
+    return hoursList.firstWhere(
+          (item) => item.day == today,
+      orElse: () => WorkingHoursModel(),
+    );
+  }
+
   Future<Set<Marker>> _createBusinessMarkers(List<BusinessResponseModel> businesses) async {
     final markers = <Marker>{};
 
     for (int i = 0; i < businesses.length; i++) {
       final business = businesses[i];
       final markerId = 'business_${business.business.name}';
+
+      final isOpen = isBusinessOpen(business.currentDay);
+      
       final customIcon = await createCustomMarkerBitmap(
-        '${business.business.queuedCount}\nWaiting',
+          isOpen ? '${business.business.queuedCount}\nWaiting' : 'Closed',
+          isOpen ? 'assets/typcn_location.png' : 'assets/closed_marker.png'
       );
       
       final marker = Marker(
@@ -96,7 +120,45 @@ class MapCubit extends Cubit<MapState> {
     return markers;
   }
 
-  Future<BitmapDescriptor> createCustomMarkerBitmap(String text) async {
+  bool isBusinessOpen(WorkingHoursModel? currentDay) {
+    if (currentDay?.startTime == null || currentDay?.endTime == null || currentDay?.startTime?.trim().isEmpty==true || currentDay?.endTime?.trim().isEmpty == true) {
+      return false;
+    }
+
+    try {
+      final now = DateTime.now();
+
+      final start = _parseTime(currentDay?.startTime);
+      final end = _parseTime(currentDay?.endTime);
+
+      bool is24Hours = currentDay?.startTime == currentDay?.endTime;
+
+      final startDateTime = DateTime(now.year, now.month, now.day, start.hour, start.minute);
+      DateTime endDateTime = DateTime(now.year, now.month, now.day, end.hour, end.minute);
+      if (endDateTime.isBefore(startDateTime)) {
+        endDateTime = endDateTime.add(const Duration(days: 1));
+      }
+
+      if (is24Hours || (now.isAfter(startDateTime) && now.isBefore(endDateTime))) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      return false;
+    }
+  }
+
+  TimeOfDay _parseTime(String? timeStr) {
+    final format = DateFormat.jm(); // e.g., 12:00 PM
+    if(timeStr==null) {
+      return const TimeOfDay(hour: 0, minute: 0);
+    }
+    final dt = format.parse(timeStr);
+    return TimeOfDay(hour: dt.hour, minute: dt.minute);
+  }
+
+  Future<BitmapDescriptor> createCustomMarkerBitmap(String text, String marker) async {
     final pictureRecorder = ui.PictureRecorder();
     final canvas = ui.Canvas(pictureRecorder);
 
@@ -106,7 +168,7 @@ class MapCubit extends Cubit<MapState> {
     final paint = Paint()..color = Colors.transparent;
     canvas.drawRect(Rect.fromLTWH(0, 0, width, height), paint);
 
-    final image = await loadImageFromAsset('assets/typcn_location.png');
+    final image = await loadImageFromAsset(marker);
     final imageOffset = Offset(
       (width - image.width) / 2,
       (height - image.height) / 2,

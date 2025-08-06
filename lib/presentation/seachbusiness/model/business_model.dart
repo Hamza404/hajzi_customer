@@ -2,10 +2,12 @@
 class BusinessResponseModel {
   final BusinessModel business;
   final List<WorkingHoursModel> workingHours;
+  WorkingHoursModel? currentDay;
 
   BusinessResponseModel({
     required this.business,
     required this.workingHours,
+    this.currentDay,
   });
 
   factory BusinessResponseModel.fromJson(Map<String, dynamic> json) {
