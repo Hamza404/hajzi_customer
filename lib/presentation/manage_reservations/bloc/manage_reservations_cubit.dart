@@ -19,13 +19,14 @@ class ManageReservationsCubit extends Cubit<ManageReservationsState> {
         
         final pendingOrders = orders.where((order) =>
             order.orders.status.toLowerCase() == 'pending').toList();
-        final queuedOrders = orders.where((order) => 
+        final queuedOrders = orders.where((order) =>
             order.orders.status.toLowerCase() == 'queued').toList();
-        final payedOrders = orders.where((order) => 
-            order.orders.status.toLowerCase() == 'accepted' ||
-            order.orders.status.toLowerCase() == 'cancelled').toList();
+        final payedOrders = orders.where((order) =>
+            order.orders.status.toLowerCase() == 'accepted').toList();
         final completedOrders = orders.where((order) => 
             order.orders.status.toLowerCase() == 'completed').toList();
+        final cancelledOrders = orders.where((order) =>
+            order.orders.status.toLowerCase() == 'cancelled').toList();
         
         emit(state.copyWith(
           isLoading: false,
@@ -33,6 +34,7 @@ class ManageReservationsCubit extends Cubit<ManageReservationsState> {
           queuedOrders: queuedOrders,
           payedOrders: payedOrders,
           completedOrders: completedOrders,
+          cancelled: cancelledOrders
         ));
       } else {
         emit(state.copyWith(

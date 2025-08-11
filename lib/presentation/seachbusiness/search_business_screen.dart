@@ -189,8 +189,8 @@ class _GoogleMapStackViewState extends State<_GoogleMapStackView> {
         ),
 
         Positioned(
-          bottom: 100,
-          right: 16,
+          left: 13,
+          top: MediaQuery.of(context).padding.top + 75,
           child: FloatingActionButton(
             onPressed: cubit.refreshLocation,
             backgroundColor: Colors.white,

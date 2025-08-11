@@ -50,7 +50,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       onTap: () {
 
                       },
-                      child: const Icon(Icons.language_outlined),
+                      child: const Icon(Icons.settings),
                     )
                   ],
                 ),
@@ -81,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ]
                   ),
                 ) : Container(
-                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  margin: const EdgeInsets.symmetric(vertical: 10),
                   padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 20),
                   decoration: BoxDecoration(
                     color: AppColors.light_gray,

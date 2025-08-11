@@ -3,6 +3,7 @@ import 'package:hajzi/theme/app_colors.dart';
 import 'package:hajzi/theme/font_styles.dart';
 import 'package:hajzi/core/utils/navigator_service.dart';
 import 'package:hajzi/routes/app_routes.dart';
+import '../../../core/constants/constants.dart';
 import '../../../widgets/custom_button.dart';
 import '../model/order_model.dart';
 
@@ -45,11 +46,11 @@ class ConfirmedOrderWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Saltzen Spa',
+                          order.business.name,
                           style: FontStyles.fontW600.copyWith(fontSize: 16),
                         ),
                         Text(
-                          'Hair Cut',
+                          Constants.getServiceNameById(order.orders.serviceId),
                           style: FontStyles.fontW900.copyWith(fontSize: 25),
                         ),
                       ],

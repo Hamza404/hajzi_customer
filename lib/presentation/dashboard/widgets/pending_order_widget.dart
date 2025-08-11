@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hajzi/theme/app_colors.dart';
 import 'package:hajzi/theme/font_styles.dart';
+import '../../../core/constants/constants.dart';
 import '../model/order_model.dart';
 
 class PendingOrderWidget extends StatelessWidget {
@@ -40,11 +41,11 @@ class PendingOrderWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Saltzen Spa',
+                          order.business.name,
                           style: FontStyles.fontW600.copyWith(fontSize: 16),
                         ),
                         Text(
-                          'Hair Cut',
+                          Constants.getServiceNameById(order.orders.serviceId),
                           style: FontStyles.fontW900.copyWith(fontSize: 25),
                         ),
                       ],

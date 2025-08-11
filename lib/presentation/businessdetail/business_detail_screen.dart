@@ -65,6 +65,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
   Future<bool> showUnauthorizedDialog(BuildContext context) async {
     final result = await showDialog<bool>(
       context: context,
+      barrierDismissible: false,
       builder: (context) {
         return AlertDialog(
           backgroundColor: Colors.white,
@@ -74,6 +75,7 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
+                NavigatorService.goBack();
               },
               child: Text("Cancel", style: FontStyles.fontW400.copyWith(fontSize: 14, color: Colors.black)),
             ),
@@ -218,7 +220,19 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
                             child: CustomButton(
                               title: 'Reserve your spot',
                               onPressed: () async {
-                                context.read<BusinessDetailCubit>().reserveSpot();
+
+                                final token = await ApiManager.getToken();
+
+                                if(token!=null) {
+                                  context.read<BusinessDetailCubit>().reserveSpot();
+                                } else {
+                                  final login = await showUnauthorizedDialog(context);
+                                  if(login) {
+                                    await NavigatorService.pushNamed(AppRoutes.signIn).then((onValue) {
+                                      context.read<BusinessDetailCubit>().getUser();
+                                    });
+                                  }
+                                }
                               },
                               backgroundColor: Colors.black,
                               textColor: Colors.white,
@@ -299,40 +313,10 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
       style: FontStyles.fontW500.copyWith(fontSize: 16, color: Colors.black),
     );
   }
-
-  Widget _buildTextField({
-    required FocusNode focusNode,
-    TextInputType keyboardType = TextInputType.text,
-    required Function(String) onChanged,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 8),
-      child: TextFormField(
-        focusNode: focusNode,
-        keyboardType: keyboardType,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.grey[300]!),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: Colors.grey[300]!),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: AppColors.primary),
-          ),
-          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        ),
-        onChanged: onChanged,
-      ),
-    );
-  }
 }
 
 void _showCategorySheet(BuildContext context, BusinessDetailState state, BusinessDetailCubit cubit) {
-  final List<int> peopleOptions = List.generate(6, (index) => index + 1);
+  final List<int> peopleOptions = List.generate(3, (index) => index + 1);
   showModalBottomSheet(
     backgroundColor: Colors.white,
     context: context,

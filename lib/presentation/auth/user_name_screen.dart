@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hajzi/core/localization/app_localization.dart';
+import 'package:hajzi/widgets/custom_toast.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/font_styles.dart';
 import '../../widgets/custom_button.dart';
@@ -59,7 +60,7 @@ class UserNameScreen extends StatelessWidget {
                               controller: userNameController,
                               keyboardType: TextInputType.text,
                               decoration: const InputDecoration(
-                                hintText: 'Full Name',
+                                hintText: 'Full Name*',
                                 border: InputBorder.none,
                               ),
                             ),
@@ -74,7 +75,11 @@ class UserNameScreen extends StatelessWidget {
                     textColor: AppColors.white,
                     isLoading: state.isLoading == true,
                     onPressed: () {
-                      context.read<AuthCubit>().updateUser(userNameController.text.trim());
+                      if(userNameController.text.isEmpty) {
+                        CustomToast.show(context, message: 'Please enter your name.');
+                      } else {
+                        context.read<AuthCubit>().updateUser(userNameController.text.trim());
+                      }
                     },
                   ),
                   const Spacer(),

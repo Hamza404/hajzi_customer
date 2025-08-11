@@ -154,7 +154,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   style: TextStyle(color: Colors.black54),
                   children: [
                     TextSpan(
-                      text: "2 minutes.",
+                      text: "1 minutes.",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ],

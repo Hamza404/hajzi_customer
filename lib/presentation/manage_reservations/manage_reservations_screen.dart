@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hajzi/core/constants/constants.dart';
 import 'package:hajzi/presentation/dashboard/model/order_model.dart';
 import 'package:hajzi/theme/app_colors.dart';
 import 'package:hajzi/theme/font_styles.dart';
@@ -66,6 +67,7 @@ class ManageReservationsScreen extends StatelessWidget {
                                   _buildStatusSection(context, 'Pending', state.pendingOrders, _buildPendingCard),
                                   _buildStatusSection(context, 'Queued', state.queuedOrders, _buildQueuedCard),
                                   _buildStatusSection(context, 'Confirmed', state.payedOrders, _buildConfirmCard),
+                                  _buildStatusSection(context, 'Cancelled', state.cancelled, _buildCancelledCard),
                                   _buildStatusSection(context, 'Completed', state.completedOrders, _buildCompletedCard),
                                 ],
 
@@ -128,7 +130,7 @@ class ManageReservationsScreen extends StatelessWidget {
                   style: FontStyles.fontW700.copyWith(fontSize: 18),
                 ),
                 Text(
-                  getServiceNameById(order.business.serviceCategoryId),
+                  Constants.getServiceNameById(order.business.serviceCategoryId),
                   style: FontStyles.fontW400.copyWith(fontSize: 16),
                 ),
               ],
@@ -192,7 +194,7 @@ class ManageReservationsScreen extends StatelessWidget {
                       order.business.name,
                       style: FontStyles.fontW700.copyWith(fontSize: 18),
                     ),
-                    Text(getServiceNameById(order.business.serviceCategoryId),
+                    Text(Constants.getServiceNameById(order.business.serviceCategoryId),
                       style: FontStyles.fontW400.copyWith(fontSize: 16),
                     ),
                   ],
@@ -261,7 +263,94 @@ class ManageReservationsScreen extends StatelessWidget {
                         style: FontStyles.fontW700.copyWith(fontSize: 18),
                       ),
                       Text(
-                        getServiceNameById(order.business.serviceCategoryId),
+                        Constants.getServiceNameById(order.business.serviceCategoryId),
+                        style: FontStyles.fontW400.copyWith(fontSize: 16),
+                      ),
+                    ],
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 58,
+                      height: 78,
+                      decoration: BoxDecoration(
+                        color: AppColors.dim_gray,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.location_on,
+                            color: AppColors.blue,
+                            size: 20,
+                          ),
+                          Text(
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            order.business.address,
+                            style: FontStyles.fontW800.copyWith(
+                              fontSize: 9,
+                              color: AppColors.blue,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: CustomButton(
+                onPressed: () {
+                  NavigatorService.pushNamed(AppRoutes.payment, arguments: order.orders).then((onValue) {
+                    if(onValue == 'onRefresh') {
+                      cubit.refreshOrders();
+                    }
+                  });
+                },
+                title: 'Proceed to Pay',
+                backgroundColor: Colors.black,
+                textColor: Colors.white,
+              ),
+            )
+          ],
+        )
+    );
+  }
+
+  Widget _buildCancelledCard(GetOrder order, BuildContext context) {
+    final cubit = context.read<ManageReservationsCubit>();
+    return Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+            color: AppColors.light_gray,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: Colors.grey.shade300,
+              width: 0.8,
+            )
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        order.business.name,
+                        style: FontStyles.fontW700.copyWith(fontSize: 18),
+                      ),
+                      Text(
+                        Constants.getServiceNameById(order.business.serviceCategoryId),
                         style: FontStyles.fontW400.copyWith(fontSize: 16),
                       ),
                     ],
@@ -324,10 +413,14 @@ class ManageReservationsScreen extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          image: const DecorationImage(
-            image: AssetImage('assets/ic_completed_bg.png'),
-            fit: BoxFit.fill,
+          borderRadius: BorderRadius.circular(18),
+          gradient: const LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              Color(0xFF1877F2),
+              Color(0xFFE3F2FD),
+            ],
           ),
         ),
         child: Column(
@@ -340,53 +433,32 @@ class ManageReservationsScreen extends StatelessWidget {
                     children: [
                       Text(
                         order.business.name,
-                        style: FontStyles.fontW600.copyWith(fontSize: 14),
+                        style: FontStyles.fontW600.copyWith(fontSize: 16, color: Colors.white),
                       ),
-                      const SizedBox(height: 4),
                       Text(
-                        getServiceNameById(order.business.serviceCategoryId),
-                        style: FontStyles.fontW600.copyWith(fontSize: 14),
+                        Constants.getServiceNameById(order.business.serviceCategoryId),
+                        style: FontStyles.fontW400.copyWith(fontSize: 12, color: Colors.white),
                       ),
-                      const SizedBox(height: 4),
                       Text(
                         order.business.address,
-                        style: FontStyles.fontW600.copyWith(fontSize: 14),
+                        style: FontStyles.fontW400.copyWith(fontSize: 12, color: Colors.white),
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 8),
                       Text(
                         'SAR ${order.orders.amount.toStringAsFixed(0)}',
-                        style: FontStyles.fontW600.copyWith(
+                        style: FontStyles.fontW800.copyWith(
                           fontSize: 18,
-                          color: AppColors.black,
+                          color: AppColors.white,
                         ),
                       ),
                     ],
                   ),
                 ),
-                const Spacer(),
                 Image.asset('assets/ic_completed_tick.png', width: 48, height: 48)
               ],
             )
           ],
         )
     );
-  }
-
-  String getServiceNameById(int id) {
-    final services = [
-      {"id": 1, "name": "Hair & Styling"},
-      {"id": 2, "name": "Car Wash & Services"},
-      {"id": 3, "name": "Restaurant"},
-      {"id": 4, "name": "Beauty Parlor"},
-      {"id": 5, "name": "Massage"},
-      {"id": 6, "name": "Medical & Dental"},
-    ];
-
-    final service = services.firstWhere(
-          (item) => item["id"] == id,
-      orElse: () => {},
-    );
-
-    return service["name"].toString();
   }
 }

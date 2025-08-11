@@ -42,41 +42,46 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 Image.asset('assets/ic_hajzi_banner.png', fit: BoxFit.cover),
                 Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10),
-                        if (state.currentOrder != null) ...[
-                          _buildOrderStatusWidget(state.currentOrder!),
+                  child: RefreshIndicator(color: Colors.black, onRefresh: () async {
+                    final cubit = context.read<DashboardCubit>();
+                    cubit.getUserProfile();
+                    cubit.fetchUserOrder();
+                  }, child: SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
                           const SizedBox(height: 10),
+                          if (state.currentOrder != null) ...[
+                            _buildOrderStatusWidget(state.currentOrder!),
+                            const SizedBox(height: 10),
+                          ],
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'find_service_near_you'.tr,
+                                  style: FontStyles.fontW800.copyWith(fontSize: 36),
+                                ),
+                              )
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Text(
+                                'Select your service',
+                                style: FontStyles.fontW800.copyWith(fontSize: 20),
+                              )
+                            ],
+                          ),
+                          const SizedBox(height: 10),
+                          state.isLoading
+                              ? _buildShimmerGrid()
+                              : _buildCategoryGrid(state),
+                          const SizedBox(height: 30)
                         ],
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'find_service_near_you'.tr,
-                                style: FontStyles.fontW800.copyWith(fontSize: 36),
-                              ),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text(
-                              'Select your service',
-                              style: FontStyles.fontW800.copyWith(fontSize: 20),
-                            )
-                          ],
-                        ),
-                        const SizedBox(height: 10),
-                        state.isLoading
-                            ? _buildShimmerGrid()
-                            : _buildCategoryGrid(state),
-                        const SizedBox(height: 30)
-                      ],
-                    ),
-                  ),
+                      ),
+                    )),
                 ),
               ],
             ),
@@ -175,24 +180,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           const Expanded(child: SizedBox()),
                         ],
                       ),
-                      const Spacer(),
-                      Container(
-                        width: 24,
-                        height: 24,
-                        decoration: const BoxDecoration(
-                          color: Colors.black,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Center(
-                          child: Text(
-                            '13',
-                            style: FontStyles.fontW400.copyWith(
-                              color: Colors.white,
-                              fontSize: 11,
-                            ),
-                          ),
-                        ),
-                      ),
+                      const Spacer()
                     ],
                   ),
                 ),
