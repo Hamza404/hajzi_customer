@@ -210,8 +210,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 final pref = PrefUtils();
                 pref.clearPreferencesData();
                 CustomToast.show(context, message: 'Logout successfully');
+
+                final cubit = context.read<DashboardCubit>();
+                cubit.getUserProfile();
+                cubit.resetProfile();
                 Navigator.of(context).pop(true);
-                context.read<DashboardCubit>().getUserProfile();
+                NavigatorService.pushNamedAndRemoveUntil(AppRoutes.mainScreen);
               },
               backgroundColor: Colors.black,
               textColor: Colors.white,

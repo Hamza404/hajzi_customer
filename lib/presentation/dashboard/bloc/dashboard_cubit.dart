@@ -65,4 +65,8 @@ class DashboardCubit extends Cubit<DashboardState> {
       emit(state.copyWith(isProfileLoading: false, profileModel: null));
     }
   }
+
+  Future<void> resetProfile() async {
+    emit(state.copyWith(isProfileLoading: false, profileModel: null));
+  }
 }
