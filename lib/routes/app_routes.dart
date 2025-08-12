@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hajzi/presentation/bottomnavigation/main_screen.dart';
+import 'package:hajzi/presentation/language_selection/language_selection_screen.dart';
 import 'package:hajzi/presentation/payment/payment_screen.dart';
 import '../presentation/auth/otp_screen.dart';
 import '../presentation/auth/sign_in_screen.dart';
@@ -18,6 +19,7 @@ class AppRoutes {
   static const String payment = '/payment';
   static const String otp = '/otp';
   static const String userNameScreen = '/user-name';
+  static const String language = '/language';
 
   static Map<String, WidgetBuilder> routes = {
     initialRoute: (context) => MainScreen.builder(context),
@@ -26,6 +28,7 @@ class AppRoutes {
     userNameScreen: UserNameScreen.builder,
     mainScreen: (context) => MainScreen.builder(context),
     dashboard: (context) => DashboardScreen.builder(context),
+    language: (context) => LanguageSelectionScreen.builder(context),
     searchBusiness: (context) {
       final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
       final categoryId = args?['categoryId'] as int?;
