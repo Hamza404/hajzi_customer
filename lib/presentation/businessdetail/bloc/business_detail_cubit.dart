@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hajzi/core/utils/navigator_service.dart';
 import 'package:hajzi/routes/app_routes.dart';
@@ -7,6 +8,12 @@ import 'business_detail_state.dart';
 
 class BusinessDetailCubit extends Cubit<BusinessDetailState> {
   BusinessDetailCubit({BusinessModel? business}) : super(BusinessDetailState(selectedBusiness: business));
+
+  Future<void> updateFCM() async {
+    final fcm = await FirebaseMessaging.instance.getToken();
+    await ApiManager.get('User/UpdateUserDeviceToken?deviceToken=$fcm');
+    print("FCM Token: $fcm");
+  }
 
   void updateFullName(String fullName) {
     emit(state.copyWith(

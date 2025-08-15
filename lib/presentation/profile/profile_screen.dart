@@ -7,6 +7,7 @@ import 'package:hajzi/presentation/dashboard/model/order_model.dart';
 import 'package:hajzi/routes/app_routes.dart';
 import 'package:hajzi/theme/app_colors.dart';
 import 'package:hajzi/widgets/custom_button.dart';
+import '../../client/api_manager.dart';
 import '../../core/utils/pref_utils.dart';
 import '../../theme/font_styles.dart';
 import '../../widgets/custom_toast.dart';
@@ -66,7 +67,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                       CustomButton(title: 'Login/Signup', onPressed: () {
                         NavigatorService.pushNamed(AppRoutes.signIn).then((onValue) {
-                          context.read<DashboardCubit>().getUserProfile();
+                          final cubit = context.read<DashboardCubit>();
+                          cubit.updateFCM();
+                          cubit.getUserProfile();
                         });
                       }, backgroundColor: Colors.black, textColor: Colors.white)
                     ]
@@ -207,6 +210,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             CustomButton(
               title: 'Logout',
               onPressed: () async {
+
+                await ApiManager.get('User/UpdateUserDeviceToken?deviceToken=');
+
                 final pref = PrefUtils();
                 pref.clearPreferencesData();
                 CustomToast.show(context, message: 'Logout successfully');

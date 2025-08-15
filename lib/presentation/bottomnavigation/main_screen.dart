@@ -14,6 +14,8 @@ import '../profile/profile_screen.dart';
 import 'bloc/tab_bloc.dart';
 import 'bloc/tab_event.dart';
 import 'bloc/tab_state.dart';
+import '../../core/services/notification_service.dart';
+
 
 class MainScreen extends StatefulWidget {
   final TabItem? initialTab;
@@ -57,38 +59,57 @@ class _MainScreenState extends State<MainScreen> {
 
     requestNotificationPermission();
     _initFirebaseMessaging();
+    
+    // Clear badges when app is opened
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      NotificationService.clearBadge();
+    });
   }
 
   void _initFirebaseMessaging() async {
 
-    final token = await getToken();
-
-    final FCMtoken = await FirebaseMessaging.instance.getToken();
-    print("FCM Token: $FCMtoken");
-
-    // Foreground
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Message received in foreground: ${message.notification?.title}');
-      // Optional: show a custom dialog or notification
-    });
-
-    // Background: when tapped and app is in background
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      final route = message.data['route'];
-      if (route != null) {
-        Navigator.pushNamed(context, route);
+      // Show local notification with badge when app is in foreground
+      if (message.notification != null) {
+        NotificationService.showForegroundNotification(
+          title: message.notification!.title ?? 'New Notification',
+          body: message.notification!.body ?? '',
+          payload: message.data.toString(),
+        );
       }
+
+      // Handle message data and refresh orders
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final selectedTab = _indexToTab(0);
+        context.read<TabBloc>().add(TabChanged(selectedTab));
+
+        if (selectedTab == TabItem.home) {
+          context.read<DashboardCubit>().fetchUserOrder();
+        }
+      });
     });
 
-    // App launch from terminated state via notification
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final selectedTab = _indexToTab(0);
+        context.read<TabBloc>().add(TabChanged(selectedTab));
+
+        if (selectedTab == TabItem.home) {
+          context.read<DashboardCubit>().fetchUserOrder();
+        }
+      });
+    });
+
     final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
-      final route = initialMessage.data['route'];
-      if (route != null) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-          Navigator.pushNamed(context, route);
-        });
-      }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final selectedTab = _indexToTab(0);
+        context.read<TabBloc>().add(TabChanged(selectedTab));
+
+        if (selectedTab == TabItem.home) {
+          context.read<DashboardCubit>().fetchUserOrder();
+        }
+      });
     }
   }
 
@@ -110,11 +131,6 @@ class _MainScreenState extends State<MainScreen> {
         print('❓ Notification permission not determined');
       }
     }
-  }
-
-  static Future<String?> getToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getString('token');
   }
 
   int _tabToIndex(TabItem tab) => TabItem.values.indexOf(tab);

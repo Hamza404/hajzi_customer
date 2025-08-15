@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hajzi/presentation/bottomnavigation/bloc/tab_bloc.dart';
 import 'package:hajzi/presentation/dashboard/bloc/dashboard_cubit.dart';
@@ -9,6 +10,7 @@ import 'package:hajzi/presentation/manage_reservations/bloc/manage_reservations_
 import 'package:hajzi/routes/app_routes.dart';
 import 'core/localization/app_localization.dart';
 import 'core/localization/locale_cubit.dart';
+import 'core/services/notification_service.dart';
 import 'core/utils/navigator_service.dart';
 import 'core/utils/pref_utils.dart';
 
@@ -19,6 +21,7 @@ void main() async {
   final savedLocale = Locale(savedLang);
 
   await Firebase.initializeApp();
+  await NotificationService.initialize();
   FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
 
   runApp(
@@ -94,4 +97,11 @@ class MyApp extends StatelessWidget {
 
 Future<void> _backgroundHandler(RemoteMessage message) async {
   // Handle background message
+  debugPrint('Background message received: ${message.messageId}');
+  
+  // Background messages are handled automatically by FCM
+  // They will show notifications with badges
+  if (message.notification != null) {
+    debugPrint('Background notification: ${message.notification!.title}');
+  }
 }

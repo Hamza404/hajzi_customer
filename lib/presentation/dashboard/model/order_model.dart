@@ -26,6 +26,7 @@ class OrderModel {
   final int totalPerson;
   final String name;
   final double amount;
+  final int positionInQueue;
 
   OrderModel({
     required this.id,
@@ -36,6 +37,7 @@ class OrderModel {
     required this.totalPerson,
     required this.name,
     required this.amount,
+    this.positionInQueue = 0
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
@@ -48,6 +50,7 @@ class OrderModel {
       totalPerson: json['totalPerson'] ?? 0,
       name: json['name'] ?? '',
       amount: (json['amount'] ?? 0).toDouble(),
+      positionInQueue: json['positionInQueue'] ?? 0
     );
   }
 }

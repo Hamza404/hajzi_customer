@@ -56,7 +56,9 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
       final login = await showUnauthorizedDialog(context);
       if(login) {
         await NavigatorService.pushNamed(AppRoutes.signIn).then((onValue) {
-          context.read<BusinessDetailCubit>().getUser();
+          final cubit = context.read<BusinessDetailCubit>();
+          cubit.getUser();
+          cubit.updateFCM();
         });
       }
     }

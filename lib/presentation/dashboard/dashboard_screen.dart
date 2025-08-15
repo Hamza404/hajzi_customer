@@ -4,6 +4,7 @@ import 'package:hajzi/core/localization/app_localization.dart';
 import 'package:hajzi/core/utils/navigator_service.dart';
 import 'package:hajzi/presentation/dashboard/bloc/dashboard_state.dart';
 import 'package:hajzi/presentation/dashboard/model/order_model.dart';
+import 'package:hajzi/presentation/dashboard/widgets/queue_order_widget.dart';
 import 'package:hajzi/routes/app_routes.dart';
 import 'package:hajzi/theme/app_colors.dart';
 import '../../theme/font_styles.dart';
@@ -99,6 +100,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       return ConfirmedOrderWidget(order: order, onPaymentSuccess: () {
         context.read<DashboardCubit>().fetchUserOrder();
       });
+    } else if (order.orders.status.toLowerCase() == 'queued') {
+      return QueueOrderWidget(order: order);
     }
     return const SizedBox.shrink();
   }
