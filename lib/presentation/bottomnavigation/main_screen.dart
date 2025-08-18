@@ -7,6 +7,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:hajzi/presentation/dashboard/dashboard_screen.dart';
 import 'package:hajzi/presentation/manage_reservations/bloc/manage_reservations_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../client/api_manager.dart';
 import '../../theme/app_colors.dart';
 import '../dashboard/bloc/dashboard_cubit.dart';
 import '../manage_reservations/manage_reservations_screen.dart';
@@ -59,7 +60,7 @@ class _MainScreenState extends State<MainScreen> {
 
     requestNotificationPermission();
     _initFirebaseMessaging();
-    
+
     // Clear badges when app is opened
     WidgetsBinding.instance.addPostFrameCallback((_) {
       NotificationService.clearBadge();
