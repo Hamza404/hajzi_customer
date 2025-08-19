@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hajzi/presentation/chat/user_chat_listing_screen.dart';
 import 'package:hajzi/presentation/dashboard/dashboard_screen.dart';
 import 'package:hajzi/presentation/manage_reservations/bloc/manage_reservations_cubit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -44,7 +45,7 @@ class _MainScreenState extends State<MainScreen> {
 
     _screens = [
       DashboardScreen.builder(context),
-      DashboardScreen.builder(context),
+      UserChatListingScreen.builder(context),
       ManageReservationsScreen.builder(context),
       ProfileScreen.builder(context),
     ];
@@ -61,7 +62,6 @@ class _MainScreenState extends State<MainScreen> {
     requestNotificationPermission();
     _initFirebaseMessaging();
 
-    // Clear badges when app is opened
     WidgetsBinding.instance.addPostFrameCallback((_) {
       NotificationService.clearBadge();
     });
@@ -70,7 +70,6 @@ class _MainScreenState extends State<MainScreen> {
   void _initFirebaseMessaging() async {
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      // Show local notification with badge when app is in foreground
       if (message.notification != null) {
         NotificationService.showForegroundNotification(
           title: message.notification!.title ?? 'New Notification',
@@ -79,7 +78,6 @@ class _MainScreenState extends State<MainScreen> {
         );
       }
 
-      // Handle message data and refresh orders
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final selectedTab = _indexToTab(0);
         context.read<TabBloc>().add(TabChanged(selectedTab));
@@ -125,11 +123,11 @@ class _MainScreenState extends State<MainScreen> {
       );
 
       if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-        print('✅ Notification permission granted');
+        print('Notification permission granted');
       } else if (settings.authorizationStatus == AuthorizationStatus.denied) {
-        print('❌ Notification permission denied');
+        print('Notification permission denied');
       } else if (settings.authorizationStatus == AuthorizationStatus.notDetermined) {
-        print('❓ Notification permission not determined');
+        print('Notification permission not determined');
       }
     }
   }

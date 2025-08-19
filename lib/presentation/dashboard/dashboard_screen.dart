@@ -45,8 +45,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Expanded(
                   child: RefreshIndicator(color: Colors.black, onRefresh: () async {
                     final cubit = context.read<DashboardCubit>();
-                    cubit.getUserProfile();
-                    cubit.fetchUserOrder();
+                    await cubit.getUserProfile();
+                    await cubit.fetchUserOrder();
                   }, child: SingleChildScrollView(
                       physics: const AlwaysScrollableScrollPhysics(),
                       child: Column(

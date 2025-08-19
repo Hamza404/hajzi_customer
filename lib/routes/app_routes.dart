@@ -5,6 +5,7 @@ import 'package:hajzi/presentation/payment/payment_screen.dart';
 import '../presentation/auth/otp_screen.dart';
 import '../presentation/auth/sign_in_screen.dart';
 import '../presentation/auth/user_name_screen.dart';
+import '../presentation/chat/user_chat_screen.dart';
 import '../presentation/dashboard/dashboard_screen.dart';
 import '../presentation/seachbusiness/search_business_screen.dart';
 import '../presentation/businessdetail/business_detail_screen.dart';
@@ -20,6 +21,7 @@ class AppRoutes {
   static const String otp = '/otp';
   static const String userNameScreen = '/user-name';
   static const String language = '/language';
+  static const String chatScreen = '/chatScreen';
 
   static Map<String, WidgetBuilder> routes = {
     initialRoute: (context) => MainScreen.builder(context),
@@ -29,6 +31,7 @@ class AppRoutes {
     mainScreen: (context) => MainScreen.builder(context),
     dashboard: (context) => DashboardScreen.builder(context),
     language: (context) => LanguageSelectionScreen.builder(context),
+    chatScreen: (context) => UserChatScreen.builder(context),
     searchBusiness: (context) {
       final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
       final categoryId = args?['categoryId'] as int?;

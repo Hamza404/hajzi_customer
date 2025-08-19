@@ -233,6 +233,9 @@ class ManageReservationsScreen extends StatelessWidget {
               ),
             ],
           ),
+          CustomButton(title: 'Chat', onPressed: () {
+            NavigatorService.pushNamed(AppRoutes.chatScreen, arguments: order.orders.id);
+          }, backgroundColor: Colors.black, textColor: Colors.white)
         ],
       ),
     );
