@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hajzi/core/localization/app_localization.dart';
 import '../../core/utils/navigator_service.dart';
 import '../../routes/app_routes.dart';
 import '../../theme/font_styles.dart';
@@ -64,15 +65,15 @@ class LanguageSelectionScreen extends StatelessWidget {
                 )),
                 const Spacer(),
                 CustomButton(
-                  title: 'Next',
+                  title: 'next'.tr,
                   backgroundColor: Colors.black,
                   textColor: Colors.white,
                   onPressed: () {
-                    //context.read<LocaleCubit>().setLocale(Locale(state.selectedLanguage));
+                    context.read<LocaleCubit>().setLocale(Locale(state.selectedLanguage));
                     NavigatorService.pushNamed(AppRoutes.mainScreen);
                   },
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -93,7 +94,7 @@ class LanguageSelectionScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () async {
         await cubit.selectLanguage(languageCode);
-        context.read<LocaleCubit>().setLocale(Locale(languageCode));
+        //context.read<LocaleCubit>().setLocale(Locale(languageCode));
       },
       child: Container(
         height: 48,

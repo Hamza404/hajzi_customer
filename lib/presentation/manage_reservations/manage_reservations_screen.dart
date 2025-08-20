@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hajzi/core/constants/constants.dart';
+import 'package:hajzi/core/localization/app_localization.dart';
 import 'package:hajzi/presentation/dashboard/model/order_model.dart';
 import 'package:hajzi/theme/app_colors.dart';
 import 'package:hajzi/theme/font_styles.dart';
@@ -32,7 +33,7 @@ class ManageReservationsScreen extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Expanded(child: Text('Manage your Reservations', style: FontStyles.fontW800.copyWith(fontSize: 36)))
+                        Expanded(child: Text('manage_your_reservations'.tr, style: FontStyles.fontW800.copyWith(fontSize: 36)))
                       ],
                     ),
                     state.isLoading ? const Center(child: CircularProgressIndicator(color: Colors.black))
@@ -56,7 +57,7 @@ class ManageReservationsScreen extends StatelessWidget {
                                           Icon(Icons.queue, size: 44, color: Colors.grey[600]),
                                           const SizedBox(height: 14),
                                           Text(
-                                            'No reservations found',
+                                            'no_reservations_found'.tr,
                                             style: FontStyles.fontW500.copyWith(
                                                 fontSize: 16, color: Colors.grey[600]),
                                           )
@@ -64,11 +65,11 @@ class ManageReservationsScreen extends StatelessWidget {
                                       )
                                 ]
                                 else ...[
-                                  _buildStatusSection(context, 'Pending', state.pendingOrders, _buildPendingCard),
-                                  _buildStatusSection(context, 'Queued', state.queuedOrders, _buildQueuedCard),
-                                  _buildStatusSection(context, 'Confirmed', state.payedOrders, _buildConfirmCard),
-                                  _buildStatusSection(context, 'Cancelled', state.cancelled, _buildCancelledCard),
-                                  _buildStatusSection(context, 'Completed', state.completedOrders, _buildCompletedCard),
+                                  _buildStatusSection(context, 'pending'.tr, state.pendingOrders, _buildPendingCard),
+                                  _buildStatusSection(context, 'queued'.tr, state.queuedOrders, _buildQueuedCard),
+                                  _buildStatusSection(context, 'confirmed'.tr, state.payedOrders, _buildConfirmCard),
+                                  _buildStatusSection(context, 'cancelled'.tr, state.cancelled, _buildCancelledCard),
+                                  _buildStatusSection(context, 'completed'.tr, state.completedOrders, _buildCompletedCard),
                                 ],
 
                                 const SizedBox(height: 24),
@@ -155,7 +156,7 @@ class ManageReservationsScreen extends StatelessWidget {
                     ),
 
                     Text(
-                      'Cancel',
+                      'cancel'.tr,
                       style: FontStyles.fontW800.copyWith(
                         fontSize: 11,
                         color: Colors.white,
@@ -233,7 +234,7 @@ class ManageReservationsScreen extends StatelessWidget {
               ),
             ],
           ),
-          CustomButton(title: 'Chat', onPressed: () {
+          CustomButton(title: 'chat'.tr, onPressed: () {
             NavigatorService.pushNamed(AppRoutes.chatScreen, arguments: order.orders.id);
           }, backgroundColor: Colors.black, textColor: Colors.white)
         ],
@@ -318,7 +319,7 @@ class ManageReservationsScreen extends StatelessWidget {
                     }
                   });
                 },
-                title: 'Proceed to Pay',
+                title: 'proceed_to_pay'.tr,
                 backgroundColor: Colors.black,
                 textColor: Colors.white,
               ),
@@ -402,7 +403,7 @@ class ManageReservationsScreen extends StatelessWidget {
                     }
                   });
                 },
-                title: 'Proceed to Pay',
+                title: 'proceed_to_pay'.tr,
                 backgroundColor: Colors.black,
                 textColor: Colors.white,
               ),

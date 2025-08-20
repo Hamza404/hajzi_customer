@@ -70,7 +70,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           Row(
                             children: [
                               Text(
-                                'Select your service',
+                                'select_your_service'.tr,
                                 style: FontStyles.fontW800.copyWith(fontSize: 20),
                               )
                             ],
@@ -78,7 +78,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           const SizedBox(height: 10),
                           state.isLoading
                               ? _buildShimmerGrid()
-                              : _buildCategoryGrid(state),
+                              : Directionality(
+                              textDirection: TextDirection.ltr,
+                              child: _buildCategoryGrid(state)),
                           const SizedBox(height: 30)
                         ],
                       ),
@@ -178,7 +180,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               category.name,
                               style: FontStyles.fontW600.copyWith(fontSize: 16),
                               maxLines: 2,
-                            ),
+                            )
                           ),
                           const Expanded(child: SizedBox()),
                         ],

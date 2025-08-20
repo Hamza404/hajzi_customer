@@ -44,7 +44,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                 Row(
                   children: [
-                    Expanded(child: Text('Profile', style: FontStyles.fontW800.copyWith(fontSize: 36)))
+                    Expanded(child: Text('profile'.tr, style: FontStyles.fontW800.copyWith(fontSize: 36)))
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -57,15 +57,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const Text(
-                        "You're not authorized. Please login to continue.",
+                      Text(
+                        "not_authorized_message".tr,
                         textAlign: TextAlign.center,
-                        style: TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 16),
                       ),
 
                       const SizedBox(height: 30),
 
-                      CustomButton(title: 'Login/Signup', onPressed: () {
+                      CustomButton(title: 'login_signup'.tr, onPressed: () {
                         NavigatorService.pushNamed(AppRoutes.signIn).then((onValue) {
                           final cubit = context.read<DashboardCubit>();
                           cubit.updateFCM();
@@ -91,15 +91,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildInfoRow('Name', state.profileModel?.name ?? ''),
+                          _buildInfoRow('name'.tr, state.profileModel?.name ?? ''),
                           const SizedBox(height: 12),
 
-                          _buildInfoRow('Phone Number', state.profileModel?.phoneNumber ?? ''),
+                          _buildInfoRow('phone_number'.tr, state.profileModel?.phoneNumber ?? ''),
                           const SizedBox(height: 12),
 
                           _buildInfoRow(
-                            'Status',
-                            state.profileModel?.isCompleted == true ? 'Complete' : 'Pending',
+                            'status'.tr,
+                            state.profileModel?.isCompleted == true ? 'complete'.tr : 'pending'.tr,
                           ),
                         ],
                       ),
@@ -109,14 +109,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                     _buildMenuItem(
                       icon: Icons.language_sharp,
-                      text: "Language",
+                      text: "language".tr,
                       onTap: () {
                         NavigatorService.pushNamed(AppRoutes.language);
                       },
                     ),
                     _buildMenuItem(
                       icon: Icons.logout,
-                      text: "Log Out",
+                      text: "logout".tr,
                       onTap: () async {
                         await showLogoutDialog(context);
                       },
@@ -198,24 +198,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
       builder: (context) {
         return AlertDialog(
           backgroundColor: Colors.white,
-          title: Text("Logout", style: FontStyles.fontW600.copyWith(fontSize: 16)),
-          content: Text("Are you sure want to logout?", style: FontStyles.fontW400.copyWith(fontSize: 14)),
+          title: Text("logout".tr, style: FontStyles.fontW600.copyWith(fontSize: 16)),
+          content: Text("logout_message".tr, style: FontStyles.fontW400.copyWith(fontSize: 14)),
           actions: [
             TextButton(
               onPressed: () {
                 NavigatorService.goBack();
               },
-              child: Text("Cancel", style: FontStyles.fontW400.copyWith(fontSize: 14, color: Colors.black)),
+              child: Text("cancel".tr, style: FontStyles.fontW400.copyWith(fontSize: 14, color: Colors.black)),
             ),
             CustomButton(
-              title: 'Logout',
+              title: 'logout'.tr,
               onPressed: () async {
 
                 await ApiManager.get('User/UpdateUserDeviceToken?deviceToken=null');
 
                 final pref = PrefUtils();
                 pref.clearPreferencesData();
-                CustomToast.show(context, message: 'Logout successfully');
+                CustomToast.show(context, message: 'logout_successfully'.tr);
 
                 final cubit = context.read<DashboardCubit>();
                 cubit.getUserProfile();

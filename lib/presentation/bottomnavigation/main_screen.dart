@@ -146,21 +146,23 @@ class _MainScreenState extends State<MainScreen> {
             index: currentIndex,
             children: _screens,
           ),
-          bottomNavigationBar: CustomBottomNavigationBar(
-            currentIndex: currentIndex,
-            onTap: (index) {
-              final selectedTab = _indexToTab(index);
-              if (selectedTab != state.currentTab) {
-                context.read<TabBloc>().add(TabChanged(selectedTab));
+          bottomNavigationBar: Directionality(
+              textDirection: TextDirection.ltr,
+              child: CustomBottomNavigationBar(
+                currentIndex: currentIndex,
+                onTap: (index) {
+                  final selectedTab = _indexToTab(index);
+                  if (selectedTab != state.currentTab) {
+                    context.read<TabBloc>().add(TabChanged(selectedTab));
 
-                if (selectedTab == TabItem.home) {
-                  context.read<DashboardCubit>().fetchUserOrder();
-                } else if (selectedTab == TabItem.request) {
-                  context.read<ManageReservationsCubit>().refreshOrders();
-                }
-              }
-            },
-          ),
+                    if (selectedTab == TabItem.home) {
+                      context.read<DashboardCubit>().fetchUserOrder();
+                    } else if (selectedTab == TabItem.request) {
+                      context.read<ManageReservationsCubit>().refreshOrders();
+                    }
+                  }
+                },
+              )),
         );
       },
     );

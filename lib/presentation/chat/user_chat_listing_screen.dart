@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hajzi/core/localization/app_localization.dart';
 import 'package:hajzi/presentation/chat/bloc/chat_cubit.dart';
 import 'package:hajzi/presentation/chat/bloc/chat_state.dart';
 import 'package:hajzi/theme/font_styles.dart';
@@ -52,7 +53,7 @@ class _UserChatListingState extends State<UserChatListingScreen> {
           children: [
             Container(
               margin: const EdgeInsets.only(top: 56, left: 16, right: 16),
-              child: Text('Chats',
+              child: Text('chats'.tr,
                   style: FontStyles.fontW800.copyWith(fontSize: 36)),
             ),
             Container(

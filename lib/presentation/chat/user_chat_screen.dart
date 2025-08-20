@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hajzi/theme/font_styles.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 import 'bloc/chat_cubit.dart';
 import 'bloc/chat_state.dart';
 
@@ -49,7 +49,7 @@ class _UserChatScreenState extends State<UserChatScreen> {
 
     if (msgDate == today) return "Today";
     if (msgDate == yesterday) return "Yesterday";
-    return DateFormat('d MMM yyyy').format(dateTime);
+    return intl.DateFormat('d MMM yyyy').format(dateTime);
   }
 
   @override
@@ -68,7 +68,7 @@ class _UserChatScreenState extends State<UserChatScreen> {
       backgroundColor: Colors.white,
       body: BlocBuilder<ChatCubit, ChatState>(
         builder: (context, state) {
-          return Column(
+          return Directionality(textDirection: TextDirection.ltr, child: Column(
             children: [
 
               Expanded(
@@ -207,6 +207,7 @@ class _UserChatScreenState extends State<UserChatScreen> {
                 ),
               ),
             ],
+          ),
           );
         },
       ),
@@ -220,14 +221,14 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
+    return Directionality(textDirection: TextDirection.ltr, child: AppBar(
       backgroundColor: Colors.white,
       elevation: 0.5,
       scrolledUnderElevation: 0,
-      leading: IconButton(
+      leading: Directionality(textDirection: TextDirection.ltr, child: IconButton(
         icon: const Icon(Icons.arrow_back, color: Colors.black),
         onPressed: () => Navigator.pop(context),
-      ),
+      )),
       title: BlocBuilder<ChatCubit, ChatState>(
           builder: (context, state) {
             return Text(
@@ -240,7 +241,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
             );
           }),
       centerTitle: false,
-    );
+    ));
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/navigator_service.dart';
+import '../utils/pref_utils.dart';
 import 'de_de/ar_translations.dart';
 import 'en_us/en_translations.dart';
 import 'package:flutter/foundation.dart';
@@ -28,7 +29,7 @@ class AppLocalization {
 
   static Future<Locale> getSavedLocale() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String languageCode = prefs.getString('languageSelection') ?? 'en';
+    String languageCode = prefs.getString(PrefUtils.language) ?? 'en';
     return Locale(languageCode);
     return Locale('ar');
   }
