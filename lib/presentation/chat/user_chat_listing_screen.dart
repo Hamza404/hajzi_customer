@@ -44,55 +44,54 @@ class _UserChatListingState extends State<UserChatListingScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
+        resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
-        body: BlocBuilder<ChatCubit, ChatState>(
-          builder: (context, state) {
-            if (state.isListingLoading) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            if (state.error != null) {
-              return Center(child: Text(state.error!));
-            }
-
-            final filteredChats = state.chatListing.where((chat) {
-              return chat.businessName.toLowerCase().contains(searchQuery.toLowerCase());
-            }).toList();
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 56, left: 16, right: 16),
-                  child: Text('Chats',
-                      style: FontStyles.fontW800.copyWith(fontSize: 36)),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 8, left: 16, right: 16),
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.grey.shade200,
-                    borderRadius: BorderRadius.circular(30),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              margin: const EdgeInsets.only(top: 56, left: 16, right: 16),
+              child: Text('Chats',
+                  style: FontStyles.fontW800.copyWith(fontSize: 36)),
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 8, left: 16, right: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade200,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: TextField(
+                  controller: _searchController,
+                  decoration: const InputDecoration(
+                    icon: Icon(Icons.search, color: Colors.grey),
+                    hintText: "Search",
+                    border: InputBorder.none,
                   ),
-                  child: TextField(
-                    controller: _searchController,
-                    decoration: const InputDecoration(
-                      icon: Icon(Icons.search, color: Colors.grey),
-                      hintText: "Search",
-                      border: InputBorder.none,
-                    ),
-                      onChanged: (value) {
-                        setState(() {
-                          searchQuery = value;
-                        });
-                      }
-                  ),
-                ),
+                  onChanged: (value) {
+                    setState(() {
+                      searchQuery = value;
+                    });
+                  }
+              ),
+            ),
 
-                Expanded(
-                  child: RefreshIndicator(
+            Expanded(child: BlocBuilder<ChatCubit, ChatState>(
+                builder: (context, state) {
+                  if (state.isListingLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  if (state.error != null) {
+                    return Center(child: Text(state.error!));
+                  }
+
+                  final filteredChats = state.chatListing.where((chat) {
+                    return chat.businessName.toLowerCase().contains(searchQuery.toLowerCase());
+                  }).toList();
+
+                  return RefreshIndicator(
                     color: Colors.black,
                     onRefresh: () async {
                       await context.read<ChatCubit>().fetchChatList(false);
@@ -110,7 +109,7 @@ class _UserChatListingState extends State<UserChatListingScreen> {
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 16, vertical: 8),
                           leading: const CircleAvatar(
-                            backgroundImage: AssetImage("assets/ic_chat.svg"),
+                            backgroundImage: NetworkImage('https://i.pravatar.cc/100')
                           ),
                           title: Text(
                             chat.businessName,
@@ -122,11 +121,10 @@ class _UserChatListingState extends State<UserChatListingScreen> {
                         );
                       },
                     ),
-                  ),
-                ),
-              ],
-            );
-          }
+                  );
+                }
+            ))
+          ],
         )
     );
   }

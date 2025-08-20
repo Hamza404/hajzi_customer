@@ -3,7 +3,7 @@ class ChatMessage {
   final int messageTo;
   final int chatId;
   final String messageText;
-  final DateTime sentTime;
+  final String sentTime;
   final DateTime? readTime;
 
   ChatMessage({
@@ -21,7 +21,7 @@ class ChatMessage {
       messageTo: json['messageTo'],
       chatId: json['chatId'],
       messageText: json['messageText'],
-      sentTime: DateTime.parse(json['sentTime']),
+      sentTime: json['sentTime'] ?? '',
       readTime: json['readTime'] != null ? DateTime.parse(json['readTime']) : null,
     );
   }
@@ -33,6 +33,8 @@ class ChatInitiate {
   final int userId;
   final int businessId;
   bool status;
+  final String userName;
+  final String businessName;
 
   ChatInitiate({
     required this.id,
@@ -40,6 +42,8 @@ class ChatInitiate {
     required this.userId,
     required this.businessId,
     required this.status,
+    this.userName = '',
+    this.businessName = ''
   });
 
   factory ChatInitiate.fromJson(Map<String, dynamic> json) {
@@ -49,6 +53,8 @@ class ChatInitiate {
       userId: json['userId'] ?? 0,
       businessId: json['businessId'] ?? 0,
       status: json['status'] ?? false,
+      userName: json['userName'] ?? '',
+      businessName: json['businessName'] ?? '',
     );
   }
 }

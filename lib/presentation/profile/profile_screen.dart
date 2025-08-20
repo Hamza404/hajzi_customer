@@ -211,7 +211,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: 'Logout',
               onPressed: () async {
 
-                await ApiManager.get('User/UpdateUserDeviceToken?deviceToken=');
+                await ApiManager.get('User/UpdateUserDeviceToken?deviceToken=null');
 
                 final pref = PrefUtils();
                 pref.clearPreferencesData();

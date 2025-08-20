@@ -65,10 +65,10 @@ class ChatCubit extends Cubit<ChatState> {
           messageTo: toUserId,
           chatId: chatId,
           messageText: messageText,
-          sentTime: DateTime.now(),
+          sentTime: getCurrentTimestamp(),
         );
 
-        final updatedList = List<ChatMessage>.from(state.messages)..add(newMessage);
+        final updatedList = List<ChatMessage>.from(state.messages)..insert(0, newMessage);
         emit(state.copyWith(messages: updatedList));
       } else {
         emit(state.copyWith(error: response['messages']?.toString() ?? 'Failed to send'));
@@ -86,7 +86,6 @@ class ChatCubit extends Cubit<ChatState> {
         final chats = (response['content'] as List)
             .map((e) => UserChatListing.fromJson(e))
             .toList();
-
         emit(state.copyWith(isListingLoading: false, chatListing: chats));
       } else {
         emit(state.copyWith(
@@ -97,5 +96,15 @@ class ChatCubit extends Cubit<ChatState> {
     } catch (e) {
       emit(state.copyWith(isListingLoading: false, error: e.toString()));
     }
+  }
+
+  String getCurrentTimestamp() {
+    final now = DateTime.now().toUtc();
+    final isoString = now.toIso8601String();
+    final withExtraPrecision = isoString.replaceFirstMapped(
+      RegExp(r'\.(\d{6})'),
+          (match) => '.${match[1]}1',
+    );
+    return withExtraPrecision.replaceFirst('Z', '+00:00');
   }
 }
