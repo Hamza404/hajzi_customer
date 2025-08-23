@@ -1,6 +1,12 @@
 final Map<String, String> enUs = {
 
-  "send_otp": "Send OTP",
+  "send_otp": "Log in/Sign up",
+  "login_or_sign_up": "Login or Sign up your\nProfessional Account",
+  "create_an_account_or_login_message": "Create an account or login with your\nphone number to get started",
+  "terms_policy": "Terms \& Policy",
+  "support": "Support",
+  "term_of_use": "Terms of use",
+  "phone_number": "Phone number",
   "find_service_near_you": "Find Services\nNear You",
   "search": "Search",
   "categories": "Categories",
@@ -24,9 +30,9 @@ final Map<String, String> enUs = {
   "logout_message": "Are you sure want to logout?",
   "logout_successfully": "Logout successfully",
   "name": "Name",
-  "phone_number": "Phone Number",
   "status": "Status",
   "complete": "Complete",
-  "next": "Next"
+  "next": "Next",
+
 
 };

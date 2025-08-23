@@ -65,9 +65,9 @@ class _UserChatListingState extends State<UserChatListingScreen> {
               ),
               child: TextField(
                   controller: _searchController,
-                  decoration: const InputDecoration(
-                    icon: Icon(Icons.search, color: Colors.grey),
-                    hintText: "Search",
+                  decoration: InputDecoration(
+                    icon: const Icon(Icons.search, color: Colors.grey),
+                    hintText: "search".tr,
                     border: InputBorder.none,
                   ),
                   onChanged: (value) {
@@ -82,10 +82,6 @@ class _UserChatListingState extends State<UserChatListingScreen> {
                 builder: (context, state) {
                   if (state.isListingLoading) {
                     return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (state.error != null) {
-                    return Center(child: Text(state.error!));
                   }
 
                   final filteredChats = state.chatListing.where((chat) {
@@ -107,10 +103,16 @@ class _UserChatListingState extends State<UserChatListingScreen> {
                       itemBuilder: (context, index) {
                         final chat = filteredChats[index];
                         return ListTile(
-                          contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16, vertical: 8),
-                          leading: const CircleAvatar(
-                            backgroundImage: NetworkImage('https://i.pravatar.cc/100')
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          leading: SizedBox(
+                            width: 40,
+                            height: 40,
+                            child: ClipOval(
+                              child: Image.asset(
+                                "assets/ic_chat.png",
+                                fit: BoxFit.cover,
+                              ),
+                            ),
                           ),
                           title: Text(
                             chat.businessName,

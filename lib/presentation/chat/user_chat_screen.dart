@@ -186,9 +186,7 @@ class _UserChatScreenState extends State<UserChatScreen> {
                           onPressed: () {
                             if (_controller.text.trim().isEmpty) return;
 
-                            final chatId = state.messages.isNotEmpty
-                                ? state.messages.first.chatId
-                                : 0;
+                            final chatId = state.chatInitiate?.id ?? 0;
 
                             context.read<ChatCubit>().sendMessage(
                                 _controller.text.trim(),
