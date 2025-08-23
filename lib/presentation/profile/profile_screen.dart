@@ -3,16 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hajzi/core/localization/app_localization.dart';
 import 'package:hajzi/core/utils/navigator_service.dart';
 import 'package:hajzi/presentation/dashboard/bloc/dashboard_state.dart';
-import 'package:hajzi/presentation/dashboard/model/order_model.dart';
 import 'package:hajzi/routes/app_routes.dart';
-import 'package:hajzi/theme/app_colors.dart';
 import 'package:hajzi/widgets/custom_button.dart';
 import '../../client/api_manager.dart';
 import '../../core/utils/pref_utils.dart';
 import '../../theme/font_styles.dart';
 import '../../widgets/custom_toast.dart';
 import '../dashboard/bloc/dashboard_cubit.dart';
-import 'package:shimmer/shimmer.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -201,12 +198,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           title: Text("logout".tr, style: FontStyles.fontW600.copyWith(fontSize: 16)),
           content: Text("logout_message".tr, style: FontStyles.fontW400.copyWith(fontSize: 14)),
           actions: [
-            TextButton(
-              onPressed: () {
-                NavigatorService.goBack();
-              },
-              child: Text("cancel".tr, style: FontStyles.fontW400.copyWith(fontSize: 14, color: Colors.black)),
-            ),
             CustomButton(
               title: 'logout'.tr,
               onPressed: () async {
@@ -224,6 +215,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 NavigatorService.pushNamedAndRemoveUntil(AppRoutes.mainScreen);
               },
               backgroundColor: Colors.black,
+              textColor: Colors.white,
+            ),
+            const SizedBox(height: 10),
+            CustomButton(
+              title: 'cancel'.tr,
+              onPressed: () async {
+                Navigator.of(context).pop();
+              },
+              backgroundColor: Colors.grey,
               textColor: Colors.white,
             ),
           ],

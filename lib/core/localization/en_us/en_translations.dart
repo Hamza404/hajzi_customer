@@ -1,7 +1,7 @@
 final Map<String, String> enUs = {
 
-  "send_otp": "Log in/Sign up",
-  "login_or_sign_up": "Login or Sign up your\nProfessional Account",
+  "send_otp": "Login/Sign up",
+  "login_or_sign_up": "Login or Sign up",
   "create_an_account_or_login_message": "Create an account or login with your\nphone number to get started",
   "terms_policy": "Terms \& Policy",
   "support": "Support",

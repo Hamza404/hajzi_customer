@@ -38,6 +38,8 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   late final List<Widget> _screens;
+  late DashboardCubit _dashboardCubit;
+  late TabBloc _tabBloc;
 
   @override
   void initState() {
@@ -49,6 +51,9 @@ class _MainScreenState extends State<MainScreen> {
       ManageReservationsScreen.builder(context),
       ProfileScreen.builder(context),
     ];
+
+    _dashboardCubit = context.read<DashboardCubit>();
+    _tabBloc = context.read<TabBloc>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final args = ModalRoute.of(context)?.settings.arguments;
@@ -78,37 +83,18 @@ class _MainScreenState extends State<MainScreen> {
         );
       }
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final selectedTab = _indexToTab(0);
-        context.read<TabBloc>().add(TabChanged(selectedTab));
-
-        if (selectedTab == TabItem.home) {
-          context.read<DashboardCubit>().fetchUserOrder();
-        }
-      });
+      _dashboardCubit.fetchUserOrder();
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final selectedTab = _indexToTab(0);
-        context.read<TabBloc>().add(TabChanged(selectedTab));
-
-        if (selectedTab == TabItem.home) {
-          context.read<DashboardCubit>().fetchUserOrder();
-        }
+        _dashboardCubit.fetchUserOrder();
       });
     });
 
     final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
     if (initialMessage != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        final selectedTab = _indexToTab(0);
-        context.read<TabBloc>().add(TabChanged(selectedTab));
-
-        if (selectedTab == TabItem.home) {
-          context.read<DashboardCubit>().fetchUserOrder();
-        }
-      });
+      _dashboardCubit.fetchUserOrder();
     }
   }
 

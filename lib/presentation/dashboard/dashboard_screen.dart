@@ -17,10 +17,7 @@ class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
 
   static Widget builder(BuildContext context) {
-    return BlocProvider<DashboardCubit>(
-      create: (context) => DashboardCubit(),
-      child: const DashboardScreen(),
-    );
+    return const DashboardScreen();
   }
 
   @override

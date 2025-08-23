@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hajzi/client/api_manager.dart';
+import 'package:hajzi/core/localization/app_localization.dart';
 import 'package:hajzi/routes/app_routes.dart';
 import 'package:hajzi/widgets/custom_button.dart';
 import '../../core/utils/navigator_service.dart';
@@ -74,19 +75,21 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
           title: Text("Unauthorized", style: FontStyles.fontW600.copyWith(fontSize: 16)),
           content: Text("You are not authorized. Please login or sign up.", style: FontStyles.fontW400.copyWith(fontSize: 14)),
           actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-                NavigatorService.goBack();
-              },
-              child: Text("Cancel", style: FontStyles.fontW400.copyWith(fontSize: 14, color: Colors.black)),
-            ),
             CustomButton(
               title: 'Login/Signup',
               onPressed: () async {
                 Navigator.of(context).pop(true);
               },
               backgroundColor: Colors.black,
+              textColor: Colors.white,
+            ),
+            const SizedBox(height: 10),
+            CustomButton(
+              title: 'cancel'.tr,
+              onPressed: () async {
+                Navigator.of(context).pop();
+              },
+              backgroundColor: Colors.grey,
               textColor: Colors.white,
             ),
           ],
@@ -185,22 +188,22 @@ class _BusinessDetailScreenState extends State<BusinessDetailScreen> {
                             ),
                           ),
                           const SizedBox(height: 20),
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: state.textMessage,
-                                onChanged: (value) => context.read<BusinessDetailCubit>().toggleTextMessage(value ?? false),
-                                activeColor: AppColors.primary,
-                              ),
-                              Expanded(
-                                child: Text(
-                                  'Get the text message letting you know when to head to your reservation.',
-                                  style: FontStyles.fontW400.copyWith(fontSize: 14, color: Colors.black),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 24),
+                          // Row(
+                          //   children: [
+                          //     Checkbox(
+                          //       value: state.textMessage,
+                          //       onChanged: (value) => context.read<BusinessDetailCubit>().toggleTextMessage(value ?? false),
+                          //       activeColor: AppColors.primary,
+                          //     ),
+                          //     Expanded(
+                          //       child: Text(
+                          //         'Get the text message letting you know when to head to your reservation.',
+                          //         style: FontStyles.fontW400.copyWith(fontSize: 14, color: Colors.black),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                          // const SizedBox(height: 24),
                           if (state.error != null) ...[
                             Container(
                               width: double.infinity,
