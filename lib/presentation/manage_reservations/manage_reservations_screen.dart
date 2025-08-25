@@ -26,59 +26,69 @@ class ManageReservationsScreen extends StatelessWidget {
     return BlocBuilder<ManageReservationsCubit, ManageReservationsState>(
       builder: (context, state) {
         return Scaffold(
+            appBar: PreferredSize(
+            preferredSize: Size.fromHeight(Constants.getResponsiveFontSize(context, 80)), // AppBar height
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.only(top: 30, left: 16, right: 16),
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(
+                'manage_your_reservations'.tr,
+                style: FontStyles.fontW800.copyWith(
+                  fontSize: Constants.getResponsiveFontSize(context, 28),
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
             backgroundColor: Colors.white,
             body: Padding(
-                padding: const EdgeInsets.only(top: 56, left: 18, right: 18),
-                child: Column(
-                  children: [
-                    Row(
+                padding: const EdgeInsets.only(left: 18, right: 18),
+                child: state.isLoading ? const Center(child: SizedBox(
+                  width: 24,
+                  height: 24,
+                  child: CircularProgressIndicator(color: Colors.black),
+                )) : RefreshIndicator(
+                  color: Colors.black,
+                  onRefresh: () => context.read<ManageReservationsCubit>().refreshOrders(false),
+                  child: state.pendingOrders.isEmpty &&
+                      state.queuedOrders.isEmpty &&
+                      state.payedOrders.isEmpty &&
+                      state.completedOrders.isEmpty
+                      ? SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.8,
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(Icons.queue, size: 44, color: Colors.grey[600]),
+                            const SizedBox(height: 14),
+                            Text(
+                              'no_reservations_found'.tr,
+                              style: FontStyles.fontW500.copyWith(
+                                fontSize: 16,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                      : SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Column(
                       children: [
-                        Expanded(child: Text('manage_your_reservations'.tr, style: FontStyles.fontW800.copyWith(fontSize: 36)))
+                        _buildStatusSection(context, 'pending'.tr, state.pendingOrders, _buildPendingCard),
+                        _buildStatusSection(context, 'queued'.tr, state.queuedOrders, _buildQueuedCard),
+                        _buildStatusSection(context, 'confirmed'.tr, state.payedOrders, _buildConfirmCard),
+                        _buildStatusSection(context, 'cancelled'.tr, state.cancelled, _buildCancelledCard),
+                        _buildStatusSection(context, 'completed'.tr, state.completedOrders, _buildCompletedCard),
                       ],
                     ),
-                    state.isLoading ? const Center(child: CircularProgressIndicator(color: Colors.black))
-                        : Expanded(
-                        child: RefreshIndicator(
-                          color: Colors.black,
-                          onRefresh: () => context.read<ManageReservationsCubit>().refreshOrders(),
-                          child: SingleChildScrollView(
-                            physics: const AlwaysScrollableScrollPhysics(),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(height: 24),
-
-                                if (state.pendingOrders.isEmpty &&
-                                    state.queuedOrders.isEmpty &&
-                                    state.payedOrders.isEmpty &&
-                                    state.completedOrders.isEmpty) ... [
-                                      Column(
-                                        children: [
-                                          Icon(Icons.queue, size: 44, color: Colors.grey[600]),
-                                          const SizedBox(height: 14),
-                                          Text(
-                                            'no_reservations_found'.tr,
-                                            style: FontStyles.fontW500.copyWith(
-                                                fontSize: 16, color: Colors.grey[600]),
-                                          )
-                                        ],
-                                      )
-                                ]
-                                else ...[
-                                  _buildStatusSection(context, 'pending'.tr, state.pendingOrders, _buildPendingCard),
-                                  _buildStatusSection(context, 'queued'.tr, state.queuedOrders, _buildQueuedCard),
-                                  _buildStatusSection(context, 'confirmed'.tr, state.payedOrders, _buildConfirmCard),
-                                  _buildStatusSection(context, 'cancelled'.tr, state.cancelled, _buildCancelledCard),
-                                  _buildStatusSection(context, 'completed'.tr, state.completedOrders, _buildCompletedCard),
-                                ],
-
-                                const SizedBox(height: 24),
-                              ],
-                            ),
-                          ),
-                        )
-                    )
-                  ],
+                  ),
                 )
             )
         );
@@ -316,7 +326,7 @@ class ManageReservationsScreen extends StatelessWidget {
                 onPressed: () {
                   NavigatorService.pushNamed(AppRoutes.payment, arguments: order.orders).then((onValue) {
                     if(onValue == 'onRefresh') {
-                      cubit.refreshOrders();
+                      cubit.refreshOrders(true);
                     }
                   });
                 },
@@ -404,8 +414,8 @@ class ManageReservationsScreen extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
           gradient: const LinearGradient(
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
+            begin: AlignmentDirectional.centerStart,
+            end: AlignmentDirectional.centerEnd,
             colors: [
               Color(0xFF1877F2),
               Color(0xFFE3F2FD),

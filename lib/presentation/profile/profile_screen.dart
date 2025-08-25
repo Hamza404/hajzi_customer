@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hajzi/core/constants/constants.dart';
 import 'package:hajzi/core/localization/app_localization.dart';
 import 'package:hajzi/core/utils/navigator_service.dart';
 import 'package:hajzi/presentation/dashboard/bloc/dashboard_state.dart';
@@ -33,45 +34,57 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return BlocBuilder<DashboardCubit, DashboardState>(
       builder: (context, state) {
         return Scaffold(
+          appBar: PreferredSize(
+            preferredSize: Size.fromHeight(Constants.getResponsiveFontSize(context, 50)), // AppBar height
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.only(top: 30, left: 16, right: 16),
+              alignment: AlignmentDirectional.centerStart,
+              child: Text(
+                'profile'.tr,
+                style: FontStyles.fontW800.copyWith(
+                  fontSize: Constants.getResponsiveFontSize(context, 28),
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
           backgroundColor: Colors.white,
           body: Padding(
-            padding: const EdgeInsets.only(top: 56, left: 18, right: 18),
-            child: Column(
-              children: [
-
-                Row(
+            padding: const EdgeInsets.only(left: 18, right: 18),
+            child: state.isProfileLoading == true ? const Center(
+              child: SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(color: Colors.black),
+              ),
+            ) : state.profileModel==null ? Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Expanded(child: Text('profile'.tr, style: FontStyles.fontW800.copyWith(fontSize: 36)))
-                  ],
-                ),
-                const SizedBox(height: 10),
+                    Text(
+                      "not_authorized_message".tr,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 16),
+                    ),
 
-                state.isProfileLoading == true ? const Center(
-                  child: CircularProgressIndicator(color: Colors.black),
-                ) : state.profileModel==null ? Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        "not_authorized_message".tr,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(fontSize: 16),
-                      ),
+                    const SizedBox(height: 30),
 
-                      const SizedBox(height: 30),
+                    CustomButton(title: 'login_signup'.tr, onPressed: () {
+                      NavigatorService.pushNamed(AppRoutes.signIn).then((onValue) {
+                        final cubit = context.read<DashboardCubit>();
+                        cubit.updateFCM();
+                        cubit.getUserProfile();
 
-                      CustomButton(title: 'login_signup'.tr, onPressed: () {
-                        NavigatorService.pushNamed(AppRoutes.signIn).then((onValue) {
-                          final cubit = context.read<DashboardCubit>();
-                          cubit.updateFCM();
-                          cubit.getUserProfile();
-                        });
-                      }, backgroundColor: Colors.black, textColor: Colors.white)
-                    ]
-                  ),
-                ) : Column(
+                      });
+                    }, backgroundColor: Colors.black, textColor: Colors.white)
+                  ]
+              ),
+            ) : Column(
+              children: [
+                Column(
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
@@ -211,6 +224,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 final cubit = context.read<DashboardCubit>();
                 cubit.getUserProfile();
                 cubit.resetProfile();
+                Global.isLoggedIn = false;
                 Navigator.of(context).pop(true);
                 NavigatorService.pushNamedAndRemoveUntil(AppRoutes.mainScreen, arguments: 0);
               },

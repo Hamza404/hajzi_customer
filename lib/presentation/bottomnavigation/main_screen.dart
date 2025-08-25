@@ -4,11 +4,14 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:hajzi/core/localization/app_localization.dart';
 import 'package:hajzi/presentation/chat/user_chat_listing_screen.dart';
 import 'package:hajzi/presentation/dashboard/dashboard_screen.dart';
 import 'package:hajzi/presentation/manage_reservations/bloc/manage_reservations_cubit.dart';
+import 'package:hajzi/theme/font_styles.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../client/api_manager.dart';
+import '../../core/constants/constants.dart';
 import '../../theme/app_colors.dart';
 import '../dashboard/bloc/dashboard_cubit.dart';
 import '../manage_reservations/manage_reservations_screen.dart';
@@ -54,6 +57,8 @@ class _MainScreenState extends State<MainScreen> {
 
     _dashboardCubit = context.read<DashboardCubit>();
     _tabBloc = context.read<TabBloc>();
+
+    ApiManager.isLoggedIn();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final args = ModalRoute.of(context)?.settings.arguments;
@@ -149,7 +154,7 @@ class _MainScreenState extends State<MainScreen> {
                     if (selectedTab == TabItem.home) {
                       context.read<DashboardCubit>().fetchUserOrder();
                     } else if (selectedTab == TabItem.request) {
-                      context.read<ManageReservationsCubit>().refreshOrders();
+                      context.read<ManageReservationsCubit>().refreshOrders(true);
                     }
                   }
                 },
@@ -183,10 +188,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
         ),
       ),
       padding: EdgeInsets.only(
-        top: 10,
+        top: 6,
         left: 8,
         right: 8,
-        bottom: 16 + MediaQuery.of(context).padding.bottom,
+        bottom: 6 + MediaQuery.of(context).padding.bottom,
       ),
       child: Row(
         children: [
@@ -194,29 +199,38 @@ class CustomBottomNavigationBar extends StatelessWidget {
             child: InkWell(
               onTap: () => onTap(0),
               child: SizedBox(
-                height: 38,
+                height: 50,
                 child: Align(
                   alignment: Alignment.center,
-                  child: Container(
-                    width: 60,
-                    height: 38,
-                    decoration: currentIndex == 0
-                        ? BoxDecoration(
-                      color: AppColors.light_gray,
-                      borderRadius: BorderRadius.circular(50),
-                    ) : null,
-                    padding: const EdgeInsets.all(5),
-                    alignment: Alignment.center,
-                    child: Column(
-                      children: [
-                        SvgPicture.asset(
-                          'assets/ic_home.svg',
-                          width: 24,
-                          height: 24,
-                          color: currentIndex == 0 ? AppColors.blue : AppColors.gray,
+                  child: Column(
+                    children: [
+                      Container(
+                        width: 75,
+                        height: 49,
+                        decoration: currentIndex == 0 ? BoxDecoration(
+                          color: AppColors.light_gray,
+                          borderRadius: BorderRadius.circular(50),
+                        ) : null,
+                        padding: const EdgeInsets.all(5),
+                        alignment: Alignment.center,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/ic_home.svg',
+                              width: 22,
+                              height: 22,
+                              color: currentIndex == 0 ? AppColors.blue : AppColors.gray,
+                            ),
+                            Text('home'.tr, style: FontStyles.fontW600.copyWith(
+                              fontSize: Constants.getResponsiveFontSize(context, 11),
+                              color: currentIndex == 0 ? AppColors.blue : AppColors.gray,
+                            ))
+                          ],
                         ),
-                      ],
-                    ),
+                      )
+                    ],
                   ),
                 ),
               ),
@@ -226,12 +240,12 @@ class CustomBottomNavigationBar extends StatelessWidget {
             child: InkWell(
               onTap: () => onTap(1),
               child: SizedBox(
-                height: 38,
+                height: 50,
                 child: Align(
                   alignment: Alignment.center,
                   child: Container(
-                    height: 38,
-                    width: 60,
+                    height: 49,
+                    width: 75,
                     decoration: currentIndex == 1
                         ? BoxDecoration(
                       color: AppColors.light_gray,
@@ -239,11 +253,21 @@ class CustomBottomNavigationBar extends StatelessWidget {
                     ) : null,
                     padding: const EdgeInsets.all(5),
                     alignment: Alignment.center,
-                    child: SvgPicture.asset(
-                      'assets/ic_chat.svg',
-                      width: 24,
-                      height: 24,
-                      color: currentIndex == 1 ? AppColors.blue : AppColors.gray,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/ic_chat.svg',
+                          width: 22,
+                          height: 22,
+                          color: currentIndex == 1 ? AppColors.blue : AppColors.gray,
+                        ),
+                        Text('chat'.tr, style: FontStyles.fontW600.copyWith(
+                          fontSize: Constants.getResponsiveFontSize(context, 10),
+                          color: currentIndex == 1 ? AppColors.blue : AppColors.gray,
+                        ))
+                      ],
                     ),
                   ),
                 ),
@@ -254,12 +278,12 @@ class CustomBottomNavigationBar extends StatelessWidget {
             child: InkWell(
               onTap: () => onTap(2),
               child: SizedBox(
-                height: 38,
+                height: 50,
                 child: Align(
                   alignment: Alignment.center,
                   child: Container(
-                    height: 38,
-                    width: 60,
+                    height: 49,
+                    width: 75,
                     decoration: currentIndex == 2
                         ? BoxDecoration(
                       color: AppColors.light_gray,
@@ -267,11 +291,21 @@ class CustomBottomNavigationBar extends StatelessWidget {
                     ) : null,
                     padding: const EdgeInsets.all(5),
                     alignment: Alignment.center,
-                    child: SvgPicture.asset(
-                      'assets/ic_request.svg',
-                      width: 24,
-                      height: 24,
-                      color: currentIndex == 2 ? AppColors.blue : AppColors.gray,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/ic_request.svg',
+                          width: 22,
+                          height: 22,
+                          color: currentIndex == 2 ? AppColors.blue : AppColors.gray,
+                        ),
+                        Text('manage'.tr, style: FontStyles.fontW600.copyWith(
+                          fontSize: Constants.getResponsiveFontSize(context, 10),
+                          color: currentIndex == 2 ? AppColors.blue : AppColors.gray,
+                        ))
+                      ],
                     ),
                   ),
                 ),
@@ -282,7 +316,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             child: InkWell(
               onTap: () => onTap(3),
               child: SizedBox(
-                height: 38,
+                height: 50,
                 child: Align(
                   alignment: Alignment.center,
                   child: Container(
@@ -291,15 +325,25 @@ class CustomBottomNavigationBar extends StatelessWidget {
                       color: AppColors.light_gray,
                       borderRadius: BorderRadius.circular(50),
                     ) : null,
-                    height: 38,
-                    width: 60,
+                    height: 49,
+                    width: 75,
                     padding: const EdgeInsets.all(5),
                     alignment: Alignment.center,
-                    child: SvgPicture.asset(
-                      'assets/ic_profile.svg',
-                      width: 24,
-                      height: 24,
-                      color: currentIndex == 3 ? AppColors.blue : AppColors.gray,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SvgPicture.asset(
+                          'assets/ic_profile.svg',
+                          width: 24,
+                          height: 24,
+                          color: currentIndex == 3 ? AppColors.blue : AppColors.gray,
+                        ),
+                        Text('profile'.tr, style: FontStyles.fontW600.copyWith(
+                            fontSize: Constants.getResponsiveFontSize(context, 10),
+                            color: currentIndex == 3 ? AppColors.blue : AppColors.gray
+                        ))
+                      ],
                     ),
                   ),
                 ),

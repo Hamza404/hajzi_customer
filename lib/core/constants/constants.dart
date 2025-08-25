@@ -1,4 +1,6 @@
 
+import 'package:flutter/cupertino.dart';
+
 class Constants {
 
   static String getServiceNameById(int id) {
@@ -17,6 +19,13 @@ class Constants {
     );
 
     return service["name"].toString();
+  }
+
+  static double getResponsiveFontSize(BuildContext context, double size) {
+    double baseWidth = 375.0;
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    return size * (screenWidth / baseWidth);
   }
 
 }

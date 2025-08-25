@@ -12,7 +12,7 @@ final Map<String, String> enUs = {
   "categories": "Categories",
   "select_your_service": "Select your service",
   "chats": "Chats",
-  "manage_your_reservations": "Manage your Reservations",
+  "manage_your_reservations": "Manage your\nReservations",
   "no_reservations_found": "No reservations found",
   "pending": "Pending",
   "queued": "Queued",
@@ -33,6 +33,9 @@ final Map<String, String> enUs = {
   "status": "Status",
   "complete": "Complete",
   "next": "Next",
+  "home": "Home",
+  "manage": "Manage",
+
 
 
 };

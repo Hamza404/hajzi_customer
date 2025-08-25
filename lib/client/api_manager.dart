@@ -23,6 +23,12 @@ class ApiManager {
     return prefs.getString(PrefUtils.language) ?? 'en';
   }
 
+  static Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    Global.isLoggedIn = prefs.getBool(PrefUtils.isLoggedIn) ?? false;
+    return Global.isLoggedIn;
+  }
+
   static Future<dynamic> post(String endpoint, {Map<String, dynamic>? body}) async {
     final token = await getToken();
     final url = Uri.parse(baseUrl + endpoint);

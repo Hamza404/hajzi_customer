@@ -53,6 +53,8 @@ class AuthCubit extends Cubit<AuthState> {
       final context = NavigatorService.navigatorKey.currentContext;
       if (response != null && response['isSuccess'] == true && response['token'] != null) {
         PrefUtils().saveValue(PrefUtils.token, response['token']);
+        PrefUtils().saveBool(PrefUtils.isLoggedIn, true);
+        Global.isLoggedIn = true;
         if (context != null) {
           CustomToast.show(
             context,

@@ -5,6 +5,7 @@ import 'package:hajzi/presentation/chat/bloc/chat_cubit.dart';
 import 'package:hajzi/presentation/chat/bloc/chat_state.dart';
 import 'package:hajzi/theme/font_styles.dart';
 
+import '../../core/constants/constants.dart';
 import '../../core/utils/navigator_service.dart';
 import '../../routes/app_routes.dart';
 
@@ -46,18 +47,28 @@ class _UserChatListingState extends State<UserChatListingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(Constants.getResponsiveFontSize(context, 50)), // AppBar height
+          child: Container(
+            color: Colors.white,
+            padding: const EdgeInsets.only(top: 30, left: 16, right: 16),
+            alignment: AlignmentDirectional.centerStart,
+            child: Text(
+              'chats'.tr,
+              style: FontStyles.fontW800.copyWith(
+                fontSize: Constants.getResponsiveFontSize(context, 28),
+                color: Colors.black,
+              ),
+            ),
+          ),
+        ),
         resizeToAvoidBottomInset: true,
         backgroundColor: Colors.white,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              margin: const EdgeInsets.only(top: 56, left: 16, right: 16),
-              child: Text('chats'.tr,
-                  style: FontStyles.fontW800.copyWith(fontSize: 36)),
-            ),
-            Container(
-              margin: const EdgeInsets.only(top: 8, left: 16, right: 16),
+              margin: const EdgeInsets.only(left: 16, right: 16),
               padding: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
@@ -81,7 +92,11 @@ class _UserChatListingState extends State<UserChatListingScreen> {
             Expanded(child: BlocBuilder<ChatCubit, ChatState>(
                 builder: (context, state) {
                   if (state.isListingLoading) {
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(),
+                    ));
                   }
 
                   final filteredChats = state.chatListing.where((chat) {

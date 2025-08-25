@@ -38,7 +38,7 @@ class DashboardState {
       categories: categories ?? this.categories,
       error: error,
       isOrderLoading: isOrderLoading ?? this.isOrderLoading,
-      currentOrder: currentOrder,
+      currentOrder: currentOrder ?? this.currentOrder,
       orderError: orderError ?? this.orderError,
       profileModel: profileModel ?? this.profileModel,
       isProfileLoading: isProfileLoading ?? this.isProfileLoading,

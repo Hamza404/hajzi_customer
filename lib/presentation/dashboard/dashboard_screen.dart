@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hajzi/client/api_manager.dart';
 import 'package:hajzi/core/localization/app_localization.dart';
 import 'package:hajzi/core/utils/navigator_service.dart';
 import 'package:hajzi/presentation/dashboard/bloc/dashboard_state.dart';
@@ -7,6 +8,8 @@ import 'package:hajzi/presentation/dashboard/model/order_model.dart';
 import 'package:hajzi/presentation/dashboard/widgets/queue_order_widget.dart';
 import 'package:hajzi/routes/app_routes.dart';
 import 'package:hajzi/theme/app_colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/utils/pref_utils.dart';
 import '../../theme/font_styles.dart';
 import 'bloc/dashboard_cubit.dart';
 import 'widgets/pending_order_widget.dart';
@@ -90,7 +93,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   Widget _buildOrderStatusWidget(GetOrder? order) {
 
-    if(order==null) {
+    if(order==null || !Global.isLoggedIn) {
       return const SizedBox();
     }
 

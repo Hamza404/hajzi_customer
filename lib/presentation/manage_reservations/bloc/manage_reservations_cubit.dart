@@ -5,11 +5,11 @@ import 'manage_reservations_state.dart';
 
 class ManageReservationsCubit extends Cubit<ManageReservationsState> {
   ManageReservationsCubit() : super(ManageReservationsState()) {
-    refreshOrders();
+    refreshOrders(true);
   }
 
-  Future<void> fetchUserOrders() async {
-    emit(state.copyWith(isLoading: true, error: null));
+  Future<void> fetchUserOrders(bool isRefresh) async {
+    emit(state.copyWith(isLoading: isRefresh, error: null));
     try {
       final response = await ApiManager.get('Order/GetUserOrder');
       if (response['isSuccess'] == true && response['content'] is List) {
@@ -47,7 +47,7 @@ class ManageReservationsCubit extends Cubit<ManageReservationsState> {
     }
   }
 
-  Future<void> refreshOrders() async {
-    await fetchUserOrders();
+  Future<void> refreshOrders(bool isRefresh) async {
+    await fetchUserOrders(isRefresh);
   }
 } 
