@@ -70,7 +70,7 @@ class LanguageSelectionScreen extends StatelessWidget {
                   textColor: Colors.white,
                   onPressed: () {
                     context.read<LocaleCubit>().setLocale(Locale(state.selectedLanguage));
-                    NavigatorService.pushNamed(AppRoutes.mainScreen);
+                    NavigatorService.pushNamed(AppRoutes.mainScreen, arguments: 0);
                   },
                 ),
                 const SizedBox(height: 20),

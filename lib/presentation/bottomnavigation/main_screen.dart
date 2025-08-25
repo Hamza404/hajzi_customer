@@ -61,6 +61,11 @@ class _MainScreenState extends State<MainScreen> {
         int index = args as int;
         final tab = TabItem.values[index];
         context.read<TabBloc>().add(TabChanged(tab));
+
+        if(index == 0) {
+          _dashboardCubit.fetchCategories();
+          _dashboardCubit.fetchUserOrder();
+        }
       }
     });
 

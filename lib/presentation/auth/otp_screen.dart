@@ -5,6 +5,7 @@ import 'package:pin_code_fields/pin_code_fields.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/font_styles.dart';
 import 'bloc/auth_cubit.dart';
+import 'bloc/auth_state.dart';
 
 class OtpScreen extends StatefulWidget {
 
@@ -26,6 +27,7 @@ class _OtpScreenState extends State<OtpScreen> {
   int _start = 60;
   bool canResend = false;
   String otpCode = "";
+  final TextEditingController otpController = TextEditingController();
 
   @override
   void initState() {
@@ -115,27 +117,35 @@ class _OtpScreenState extends State<OtpScreen> {
 
             const SizedBox(height: 24),
 
-            PinCodeTextField(
-              appContext: context,
-              length: 6,
-              keyboardType: TextInputType.number,
-              animationType: AnimationType.fade,
-              onChanged: (value) {
-                otpCode = value;
+            BlocListener<AuthCubit, AuthState>(
+              listenWhen: (previous, current) => current.errorMessage?.isNotEmpty==true,
+              listener: (context, state) {
+                otpController.clear();
               },
-              onCompleted: (pin) {
-                context.read<AuthCubit>().verifyOtp(number: fullNumber, pin: pin);
-              },
-              pinTheme: PinTheme(
-                shape: PinCodeFieldShape.box,
-                borderRadius: BorderRadius.circular(8),
-                fieldHeight: fieldWidth * 1.2,
-                fieldWidth: fieldWidth,
-                activeColor: AppColors.black,
-                selectedColor: AppColors.black,
-                inactiveColor: Colors.grey.shade400,
+              child:  PinCodeTextField(
+                appContext: context,
+                length: 6,
+                controller: otpController,
+                keyboardType: TextInputType.number,
+                animationType: AnimationType.fade,
+                onChanged: (value) {
+                  otpCode = value;
+                },
+                onCompleted: (pin) {
+                  context.read<AuthCubit>().verifyOtp(number: fullNumber, pin: pin);
+                },
+                pinTheme: PinTheme(
+                  shape: PinCodeFieldShape.box,
+                  borderRadius: BorderRadius.circular(8),
+                  fieldHeight: fieldWidth * 1.2,
+                  fieldWidth: fieldWidth,
+                  activeColor: AppColors.black,
+                  selectedColor: AppColors.black,
+                  inactiveColor: Colors.grey.shade400,
+                ),
               ),
-            ),
+            )
+            ,
 
             Align(
               alignment: Alignment.center,

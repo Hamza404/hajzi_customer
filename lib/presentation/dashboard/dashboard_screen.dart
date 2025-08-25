@@ -25,7 +25,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +49,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 10),
-                          if (state.currentOrder != null) ...[
-                            _buildOrderStatusWidget(state.currentOrder!),
-                            const SizedBox(height: 10),
-                          ],
+                          _buildOrderStatusWidget(state.currentOrder),
+                          const SizedBox(height: 10),
                           Row(
                             children: [
                               Expanded(
@@ -91,7 +88,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildOrderStatusWidget(GetOrder order) {
+  Widget _buildOrderStatusWidget(GetOrder? order) {
+
+    if(order==null) {
+      return const SizedBox();
+    }
+
     if (order.orders.status.toLowerCase() == 'pending') {
       return PendingOrderWidget(order: order);
     } else if (order.orders.status.toLowerCase() == 'accepted' ||

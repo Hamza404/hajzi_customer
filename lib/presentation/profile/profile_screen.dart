@@ -202,7 +202,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               title: 'logout'.tr,
               onPressed: () async {
 
-                await ApiManager.get('User/UpdateUserDeviceToken?deviceToken=null');
+                ApiManager.get('User/UpdateUserDeviceToken?deviceToken=null');
 
                 final pref = PrefUtils();
                 pref.clearPreferencesData();
@@ -212,7 +212,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 cubit.getUserProfile();
                 cubit.resetProfile();
                 Navigator.of(context).pop(true);
-                NavigatorService.pushNamedAndRemoveUntil(AppRoutes.mainScreen);
+                NavigatorService.pushNamedAndRemoveUntil(AppRoutes.mainScreen, arguments: 0);
               },
               backgroundColor: Colors.black,
               textColor: Colors.white,

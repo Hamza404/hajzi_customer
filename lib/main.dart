@@ -51,41 +51,42 @@ class MyApp extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
 
-          return MaterialApp(
-            title: '7ajzi',
-            routes: AppRoutes.routes,
-            navigatorKey: NavigatorService.navigatorKey,
-            initialRoute: AppRoutes.initialRoute,
-            debugShowCheckedModeBanner: false,
-            localizationsDelegates: const [
-              AppLocalizationDelegate(),
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
-            supportedLocales: const [
-              Locale('en'),
-              Locale('ar'),
-            ],
-            locale: snapshot.data,
-            localeResolutionCallback: (locale, supportedLocales) {
-              for (var supportedLocale in supportedLocales) {
-                if (supportedLocale.languageCode == locale?.languageCode) {
-                  return supportedLocale;
-                }
-              }
-              return supportedLocales.first;
-            },
-            builder: (context, child) {
-              return Directionality(
-                textDirection: _getTextDirection(snapshot.data!.languageCode),
-                child: child!,
+          return BlocBuilder<LocaleCubit, Locale>(
+            builder: (context, locale) {
+              return MaterialApp(
+                title: '7ajzi',
+                routes: AppRoutes.routes,
+                navigatorKey: NavigatorService.navigatorKey,
+                debugShowCheckedModeBanner: false,
+                initialRoute: AppRoutes.initialRoute,
+                localizationsDelegates: const [
+                  AppLocalizationDelegate(),
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                supportedLocales: const [
+                  Locale('en'),
+                  Locale('ar'),
+                ],
+                locale: locale,
+                builder: (context, child) {
+                  return Directionality(
+                    textDirection: _getTextDirection(locale.languageCode),
+                    child: child!,
+                  );
+                },
+                theme: ThemeData(
+                    useMaterial3: true,
+                    fontFamily: 'Poppins',
+                    textSelectionTheme: const TextSelectionThemeData(
+                      cursorColor: Colors.black,
+                      selectionColor: Colors.grey,
+                      selectionHandleColor: Colors.black,
+                    )
+                ),
               );
             },
-            theme: ThemeData(
-              useMaterial3: true,
-              fontFamily: 'Poppins',
-            ),
           );
         });
   }

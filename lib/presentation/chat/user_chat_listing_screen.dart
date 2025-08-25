@@ -94,7 +94,17 @@ class _UserChatListingState extends State<UserChatListingScreen> {
                       await context.read<ChatCubit>().fetchChatList(false);
                     },
                     child: filteredChats.isEmpty
-                        ? const Center(child: Text("No chats found"))
+                        ? ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      children: const [
+                        SizedBox(
+                          height: 500,
+                          child: Center(
+                            child: Text("No chats found"),
+                          ),
+                        ),
+                      ],
+                    )
                         : ListView.separated(
                       physics: const AlwaysScrollableScrollPhysics(),
                       itemCount: filteredChats.length,

@@ -234,6 +234,7 @@ class ManageReservationsScreen extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 10),
           CustomButton(title: 'chat'.tr, onPressed: () {
             NavigatorService.pushNamed(AppRoutes.chatScreen, arguments: order.orders.id);
           }, backgroundColor: Colors.black, textColor: Colors.white)
@@ -391,22 +392,6 @@ class ManageReservationsScreen extends StatelessWidget {
                   ],
                 )
               ],
-            ),
-            const SizedBox(height: 12),
-            SizedBox(
-              width: double.infinity,
-              child: CustomButton(
-                onPressed: () {
-                  NavigatorService.pushNamed(AppRoutes.payment, arguments: order.orders).then((onValue) {
-                    if(onValue == 'onRefresh') {
-                      cubit.refreshOrders();
-                    }
-                  });
-                },
-                title: 'proceed_to_pay'.tr,
-                backgroundColor: Colors.black,
-                textColor: Colors.white,
-              ),
             )
           ],
         )

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import '../core/utils/pref_utils.dart';
 
 class Global {
   static String userId = "";
@@ -15,6 +16,11 @@ class ApiManager {
   static Future<String?> getToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('token');
+  }
+
+  static Future<String> getLanguage() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(PrefUtils.language) ?? 'en';
   }
 
   static Future<dynamic> post(String endpoint, {Map<String, dynamic>? body}) async {
@@ -41,12 +47,14 @@ class ApiManager {
 
   static Future<dynamic> get(String endpoint) async {
     final token = await getToken();
+    final lang = await getLanguage();
     final url = Uri.parse(baseUrl + endpoint);
     final response = await http.get(
       url,
       headers: {
         'Accept': 'application/json',
         if (token != null) 'Authorization': 'Bearer $token',
+        'culture': lang,
       },
     );
     if (response.statusCode == 200) {

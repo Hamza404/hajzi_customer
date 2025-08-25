@@ -69,7 +69,7 @@ class DashboardCubit extends Cubit<DashboardState> {
         emit(state.copyWith(isOrderLoading: false, orderError: response['messages']?.toString() ?? 'Unknown error'));
       }
     } catch (e) {
-      emit(state.copyWith(isOrderLoading: false, orderError: e.toString()));
+      emit(state.copyWith(isOrderLoading: false, currentOrder: null));
     }
   }
 
