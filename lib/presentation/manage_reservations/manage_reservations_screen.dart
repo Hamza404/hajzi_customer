@@ -147,35 +147,46 @@ class ManageReservationsScreen extends StatelessWidget {
               ],
             ),
           ),
-          Column(
-            children: [
-              Container(
-                width: 58,
-                height: 78,
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(
-                      Icons.close,
-                      color: Colors.white,
-                      size: 20,
+          BlocBuilder<ManageReservationsCubit, ManageReservationsState>(
+              builder: (child, state) {
+                return InkWell(
+                  onTap: () {
+                    context.read<ManageReservationsCubit>().cancelOrder(order.orders.id);
+                  },
+                  child: Container(
+                    width: 58,
+                    height: 78,
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(8),
                     ),
-
-                    Text(
-                      'cancel'.tr,
-                      style: FontStyles.fontW800.copyWith(
-                        fontSize: 11,
-                        color: Colors.white,
-                      ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        state.orderCancelLoading ? const Center(
+                          child: SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(color: Colors.white),
+                          ),
+                        ) : const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        const SizedBox(height: 6),
+                        Text(
+                          'cancel'.tr,
+                          style: FontStyles.fontW800.copyWith(
+                            fontSize: 11,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-            ],
+                  ),
+                );
+              }
           )
         ],
       ),

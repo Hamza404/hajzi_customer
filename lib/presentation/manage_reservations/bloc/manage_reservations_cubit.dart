@@ -47,6 +47,23 @@ class ManageReservationsCubit extends Cubit<ManageReservationsState> {
     }
   }
 
+  Future<void> cancelOrder(int orderId) async {
+    emit(state.copyWith(orderCancelLoading: true, error: null));
+    try {
+      final response = await ApiManager.get('Order/UpdateCancelledOrderStatus?id=$orderId');
+      if (response['isSuccess'] == true) {
+        refreshOrders(false);
+      } else {
+        emit(state.copyWith(
+            orderCancelLoading: false,
+            error: response['messages']?.toString() ?? 'Unknown error'
+        ));
+      }
+    } catch (e) {
+      emit(state.copyWith(orderCancelLoading: false, error: e.toString()));
+    }
+  }
+
   Future<void> refreshOrders(bool isRefresh) async {
     await fetchUserOrders(isRefresh);
   }

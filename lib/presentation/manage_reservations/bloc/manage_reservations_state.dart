@@ -8,6 +8,7 @@ class ManageReservationsState {
   final List<GetOrder> payedOrders;
   final List<GetOrder> completedOrders;
   final List<GetOrder> cancelled;
+  final bool orderCancelLoading;
 
   ManageReservationsState({
     this.isLoading = false,
@@ -17,6 +18,7 @@ class ManageReservationsState {
     this.payedOrders = const [],
     this.completedOrders = const [],
     this.cancelled = const [],
+    this.orderCancelLoading = false
   });
 
   ManageReservationsState copyWith({
@@ -27,6 +29,7 @@ class ManageReservationsState {
     List<GetOrder>? payedOrders,
     List<GetOrder>? completedOrders,
     List<GetOrder>? cancelled,
+    bool? orderCancelLoading
   }) {
     return ManageReservationsState(
       isLoading: isLoading ?? this.isLoading,
@@ -36,6 +39,7 @@ class ManageReservationsState {
       payedOrders: payedOrders ?? this.payedOrders,
       completedOrders: completedOrders ?? this.completedOrders,
       cancelled: cancelled ?? this.cancelled,
+      orderCancelLoading: orderCancelLoading ?? this.orderCancelLoading,
     );
   }
 } 
